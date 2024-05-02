@@ -33,7 +33,7 @@ if ( params.help ) {
 // Define the `REFINDEX` process that creates the index of the genome
 process REFINDEX {
     tag "$reference"
-    publishDir "${params.outdir}/REFINDEX"
+//    publishDir "${params.outdir}/REFINDEX"
 
     input:
     path reference
@@ -52,7 +52,7 @@ process REFINDEX {
 process QCONTROL{
     tag "${sid}"
     cpus params.cpus
-    publishDir "${params.outdir}/fastp"
+    publishDir "${params.outdir}/QCONTROL"
 
     input:
     tuple val(sid), path(reads)
@@ -78,7 +78,7 @@ process QCONTROL{
 process ALIGN {
     tag "$reference ${sid}"
     cpus params.cpus
-    publishDir "${params.outdir}/ALIGN"
+//    publishDir "${params.outdir}/ALIGN"
     debug true
 
     input:
@@ -101,7 +101,7 @@ process ALIGN {
 // Define the `PREPARE` process that prepares the reference genome indices
 process PREPARE {
     tag "$bamFile $reference"
-    publishDir "${params.outdir}/PREPARE"
+//    publishDir "${params.outdir}/PREPARE"
 	
     input:
     path reference
@@ -121,10 +121,9 @@ process PREPARE {
 // Define the `VARCALL` process that performs variant calling
 process VARCALL {
     tag "$reference $bamFile"
-    publishDir "${params.outdir}/deepvariant"
+    publishDir "${params.outdir}/VARCALL"
 	debug true
     cpus params.cpus
-//    errorStrategy 'ignore'
 	
     input:
     path reference
