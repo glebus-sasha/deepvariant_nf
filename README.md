@@ -4,18 +4,15 @@ This repository contains a Nextflow variant calling pipeline for analyzing Next-
 
 ```mermaid
 flowchart TB
-    subgraph " "
-    v0["Channel.fromFilePairs"]
+    subgraph "input"
+    v0["reads"]
     v1["reference"]
-    v5["reference"]
-    v7["reference"]
-    v9["reference"]
     end
     v2([REFINDEX])
     v3([QCONTROL])
-    subgraph " "
-    v4[" "]
-    v11[" "]
+    subgraph "output"
+    v4["quality report"]
+    v11["VCF"]
     end
     v6([ALIGN])
     v8([PREPARE])
@@ -25,12 +22,12 @@ flowchart TB
     v2 --> v6
     v3 --> v6
     v3 --> v4
-    v5 --> v6
+    v1 --> v6
     v6 --> v8
     v6 --> v10
-    v7 --> v8
+    v1 --> v8
     v8 --> v10
-    v9 --> v10
+    v1 --> v10
     v10 --> v11
 ```
 
