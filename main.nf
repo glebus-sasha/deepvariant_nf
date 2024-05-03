@@ -24,6 +24,8 @@ if ( params.help ) {
             |                   [default: ${params.outdir}]
             |
             |Optional arguments:
+            |   -profile        <docker/singularity>
+            |
 """.stripMargin()
     // Print the help with the stripped margin and exit
     println(help)
@@ -122,7 +124,6 @@ process PREPARE {
 process VARCALL {
     tag "$reference $bamFile"
     publishDir "${params.outdir}/VARCALL"
-	debug true
     cpus params.cpus
 	
     input:
