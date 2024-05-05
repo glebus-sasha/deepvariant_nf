@@ -51,7 +51,7 @@ To quickly run the pipeline, use the following command:
 nextflow run glebus-sasha/deepvariant \
 -profile docker \
 --reference <path-to-reference>\
---reads <path-to-reads>\
+--reads <path-to-reads-folder>\
 --outdir results
 ```
 
