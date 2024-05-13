@@ -134,7 +134,9 @@ process VARCALL {
     path fai
 
     output:
-    file '*'
+    file '*.vcf.gz'
+    file '*.g.vcf.gz'
+    file '*.html'
     
     script:
     """
@@ -148,6 +150,24 @@ process VARCALL {
     """
 }
 
+// Define the `ANNOTATE` process that performs annotation
+process ANNOTATE {
+    tag "$vcf"
+    publishDir "${params.outdir}/ANNOTATE"
+	debug true
+	
+    input:
+    path vcf
+
+    output:
+    file '*.vep.vcf'
+
+    script:
+    """
+    vep --database -i $vcf -o ${vcf.baseName}.vep.vcf 
+    """
+}
+
 // Define the input channels for FASTQ files, if provided
 input_fastqs = params.reads ? Channel.fromFilePairs(params.reads, checkIfExists: true) : null
 
@@ -158,6 +178,7 @@ workflow {
        	ALIGN(QCONTROL.out[0], params.reference, REFINDEX.out)
       	PREPARE(params.reference, ALIGN.out)
        	VARCALL(params.reference, ALIGN.out, PREPARE.out[0], PREPARE.out[1])
+        ANNOTATE(VARCALL[0])
 }
 
 // Log pipeline execution summary on completion
