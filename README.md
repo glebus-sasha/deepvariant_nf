@@ -49,9 +49,9 @@ To quickly run the pipeline, use the following command:
 
 ```bash
 nextflow run glebus-sasha/deepvariant \
--profile docker \
---reference <path-to-reference>\
---reads <path-to-reads-folder>\
+-profile <docker/singularity> \
+--reference <path-to-reference> \
+--reads "<path-to-reads-folder>/*R{1,2}*.fastq*" \ # quotes are important
 --outdir results
 ```
 
