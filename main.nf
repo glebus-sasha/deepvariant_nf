@@ -178,7 +178,7 @@ workflow {
        	ALIGN(QCONTROL.out[0], params.reference, REFINDEX.out)
       	PREPARE(params.reference, ALIGN.out)
        	VARCALL(params.reference, ALIGN.out, PREPARE.out[0], PREPARE.out[1])
-        ANNOTATE(VARCALL[0])
+        ANNOTATE(VARCALL.out[0])
 }
 
 // Log pipeline execution summary on completion
