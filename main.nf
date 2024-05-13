@@ -164,7 +164,7 @@ process ANNOTATE {
 
     script:
     """
-    vep --database -i $vcf -o ${vcf.baseName}.vep.vcf 
+    vep --database -i $vcf -o ${vcf.baseName}.vep.vcf --everything
     """
 }
 
