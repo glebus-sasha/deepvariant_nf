@@ -134,8 +134,8 @@ process VARCALL {
     path fai
 
     output:
-    file '*.vcf.gz'
-    file '*.g.vcf.gz'
+    file "${bamFile.baseName}.vcf.gz"
+    file "${bamFile.baseName}.g.vcf.gz"
     file '*.html'
     
     script:
