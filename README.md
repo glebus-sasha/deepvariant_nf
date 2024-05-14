@@ -1,4 +1,4 @@
-# deepvariant
+# deepvariant_nf
 
 This repository contains a Nextflow variant calling pipeline for analyzing Next-Generation Sequencing (NGS) data using [deepvariant](https://github.com/google/deepvariant).
 
