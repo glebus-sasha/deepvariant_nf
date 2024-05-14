@@ -94,7 +94,7 @@ process ALIGN {
     script:
     """
     bwa mem \
-    -R "@RG\\tID:S41\\tSM:H1_U5\\tLB:M4\\tPU:Illumina" \
+    -R "@RG\\tID:\\tSM:\\tLB:\\tPU:" \
     -t ${task.cpus} ${reference} ${reads1} ${reads2} | \
     samtools view -bh | \
     samtools sort -o ${sid}.sorted.bam

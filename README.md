@@ -51,7 +51,7 @@ To quickly run the pipeline, use the following command:
 nextflow run glebus-sasha/deepvariant \
 -profile <docker/singularity> \
 --reference <path-to-reference> \
---reads "<path-to-reads-folder>/*R{1,2}*.fastq*" \ # quotes are important
+--reads "<path-to-reads-folder>/*[rR]{1,2}*.fastq*" \ # quotes are important
 --outdir results
 ```
 
@@ -59,7 +59,7 @@ nextflow run glebus-sasha/deepvariant \
 
 - Nextflow (https://www.nextflow.io/docs/latest/install.html)
 - Docker (https://docs.docker.com/engine/install/) or
-Singularity (https://docs.sylabs.io/guides/3.0/user-guide/installation.html)
+- Singularity (https://github.com/sylabs/singularity/blob/main/INSTALL.md)
 
 ### Running the Pipeline
 
