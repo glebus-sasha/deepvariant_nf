@@ -12,11 +12,12 @@ flowchart TB
     v3([QCONTROL])
     subgraph "output"
     v4["quality report"]
-    v11["VCF"]
+    v14["VCF"]
     end
     v6([ALIGN])
     v8([PREPARE])
     v10([VARCALL])
+    v13([ANNOTATE])
     v0 --> v3
     v1 --> v2
     v2 --> v6
@@ -28,7 +29,8 @@ flowchart TB
     v1 --> v8
     v8 --> v10
     v1 --> v10
-    v10 --> v11
+    v10 --> v13
+    v13 --> v14
 ```
 
 ## Description
@@ -40,6 +42,7 @@ The pipeline is implemented in Nextflow and includes several stages for NGS data
 3. **ALIGN:** Sequence alignment using BWA mem.
 4. **PREPARE:** File processing and preparation using Samtools.
 5. **VARCALL:** Variant calling using deepvariant.
+6. **ANNOTATE:** Annotation using vep.
 
 ## Usage
 
