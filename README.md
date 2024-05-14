@@ -3,7 +3,7 @@
 This repository contains a Nextflow variant calling pipeline for analyzing Next-Generation Sequencing (NGS) data using [deepvariant](https://github.com/google/deepvariant).
 
 ```mermaid
-%%{init: {'theme':'dark'}}%%
+%%{init: {'theme':'base'}}%%
 flowchart TB
     subgraph "input"
     v0["reads"]
