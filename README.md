@@ -42,6 +42,7 @@ The pipeline is implemented in Nextflow and includes several stages for NGS data
 3. **ALIGN:** Sequence alignment using BWA mem.
 4. **PREPARE:** File processing and preparation using Samtools.
 5. **VARCALL:** Variant calling using deepvariant.
+6. **ANNOTATE:** Annotation using vep.
 
 ## Usage
 
