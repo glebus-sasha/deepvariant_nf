@@ -17,6 +17,7 @@ flowchart TB
     v6([ALIGN])
     v8([PREPARE])
     v10([VARCALL])
+    v13([ANNOTATE])
     v0 --> v3
     v1 --> v2
     v2 --> v6
@@ -28,7 +29,10 @@ flowchart TB
     v1 --> v8
     v8 --> v10
     v1 --> v10
+    v10 --> v13
+    v10 --> v12
     v10 --> v11
+    v13 --> v14
 ```
 
 ## Description
