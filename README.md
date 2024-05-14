@@ -51,7 +51,7 @@ The pipeline is implemented in Nextflow and includes several stages for NGS data
 To quickly run the pipeline, use the following command:
 
 ```bash
-nextflow run glebus-sasha/deepvariant \
+nextflow run glebus-sasha/deepvariant_nf \
 -profile <docker/singularity> \
 --reference <path-to-reference> \
 --reads "<path-to-reads-folder>/*[rR]{1,2}*.fastq*" \ # quotes are important
@@ -67,8 +67,8 @@ nextflow run glebus-sasha/deepvariant \
 ### Running the Pipeline
 
 1. Install all the necessary dependencies such as Nextflow, Singularity.
-3. Clone this repository: `git clone https://github.com/glebus-sasha/deepvariant.git`
-4. Navigate to the pipeline directory: `cd deepvariant`
+3. Clone this repository: `git clone https://github.com/glebus-sasha/deepvariant_nf.git`
+4. Navigate to the pipeline directory: `cd deepvariant_nf`
 5. Edit the `nextflow.config` file to set the required parameters, if necessary.
 6. Run the pipeline, setting the required parameters, for example:
 
