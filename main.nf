@@ -2,7 +2,7 @@
 
 log.info """\
     ==========================================
-     D E E P   V A R I A N T   P I P E L I N E
+     D E E P V A R I A N T   P I P E L I N E
     ==========================================
 
     reference: ${params.reference}
@@ -124,7 +124,7 @@ process PREPARE {
 // Define the `VARCALL` process that performs variant calling
 process VARCALL {
     tag "$reference $bamFile"
-    publishDir "${params.outdir}/VARCALL"
+//    publishDir "${params.outdir}/VARCALL"
     cpus params.cpus
 	
     input:
@@ -146,7 +146,7 @@ process VARCALL {
     --reads=$bamFile \
     --output_vcf=${bamFile.baseName}.vcf.gz \
     --output_gvcf=${bamFile.baseName}.g.vcf.gz \
-    --num_shards=${task.cpus}
+    --num_shards=${task.cpus} 
     """
 }
 
@@ -155,6 +155,7 @@ process ANNOTATE {
     tag "$vcf"
     publishDir "${params.outdir}/ANNOTATE"
 	debug true
+    cpus params.cpus
 	
     input:
     path vcf
@@ -164,7 +165,13 @@ process ANNOTATE {
 
     script:
     """
-    vep --database -i $vcf -o ${vcf.baseName}.vep.vcf --everything
+    vep \
+    -i $vcf \
+    -o ${vcf.baseName}.vep.vcf \
+    --database \
+    --fork $task.cpus \
+    --everything \
+    --dont_skip
     """
 }
 
