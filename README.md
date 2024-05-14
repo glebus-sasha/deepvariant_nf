@@ -5,6 +5,7 @@ This repository contains a Nextflow variant calling pipeline for analyzing Next-
 ```mermaid
 flowchart TB
     subgraph "input"
+    style subgraph fill:#ccc;
     v0["reads"]
     v1["reference"]
     end
