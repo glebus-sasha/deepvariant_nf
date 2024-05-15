@@ -117,11 +117,7 @@ process PREPARE {
     script:
     """
 	samtools index ${bamFile.baseName}.bam
-    
-    if $reference.endswith('.gz'):
-        gunzip -c "$reference" > temp.fasta && samtools faidx temp.fasta && rm temp.fasta
-    else:
-        samtools faidx $reference
+    samtools faidx "$reference"
     """
 }
 
@@ -179,17 +175,29 @@ process ANNOTATE {
     """
 }
 
-// Define the input channels for FASTQ files, if provided
+// Define the input channel for FASTQ files, if provided
 input_fastqs = params.reads ? Channel.fromFilePairs(params.reads, checkIfExists: true) : null
+
+// Define the input channel for bwa index files, if provided
+idx = params.bwaidx ? Channel.fromPath(params.bwaidx, checkIfExists: true).collect() : null
 
 // Define the workflow
 workflow {
-		REFINDEX(params.reference)
-		QCONTROL(input_fastqs)
-       	ALIGN(QCONTROL.out[0], params.reference, REFINDEX.out)
-      	PREPARE(params.reference, ALIGN.out)
-       	VARCALL(params.reference, ALIGN.out, PREPARE.out[0], PREPARE.out[1])
+    if( params.prebuild_idx == true ) {
+        QCONTROL(input_fastqs)
+        ALIGN(QCONTROL.out[0], params.reference, idx)
+        PREPARE(params.reference, ALIGN.out)
+        VARCALL(params.reference, ALIGN.out, PREPARE.out[0], PREPARE.out[1])
         ANNOTATE(VARCALL.out[0])
+    }
+    else {
+        REFINDEX(params.reference)
+        QCONTROL(input_fastqs)
+        ALIGN(QCONTROL.out[0], params.reference, REFINDEX.out)
+        PREPARE(params.reference, ALIGN.out)
+        VARCALL(params.reference, ALIGN.out, PREPARE.out[0], PREPARE.out[1])
+        ANNOTATE(VARCALL.out[0])
+    }
 }
 
 // Log pipeline execution summary on completion
