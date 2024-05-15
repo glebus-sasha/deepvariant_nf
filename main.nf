@@ -156,6 +156,7 @@ process ANNOTATE {
     publishDir "${params.outdir}/ANNOTATE"
 	debug true
     cpus params.cpus
+    errorStrategy 'ignore'
 	
     input:
     path vcf
