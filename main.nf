@@ -117,7 +117,11 @@ process PREPARE {
     script:
     """
 	samtools index ${bamFile.baseName}.bam
-    samtools faidx $reference
+    
+    if $reference.endswith('.gz'):
+        gunzip -c "$reference" > temp.fasta && samtools faidx temp.fasta && rm temp.fasta
+    else:
+        samtools faidx $reference
     """
 }
 
