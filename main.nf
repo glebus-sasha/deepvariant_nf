@@ -37,13 +37,16 @@ if ( params.help ) {
 process REFINDEX {
     tag "$reference"
 //    publishDir "${params.outdir}/REFINDEX"
+    cpus params.cpus
+//	  debug true
+//    errorStrategy 'ignore'
 
     input:
     path reference
     debug true
 
     output:
-    path "*"
+    path "*", emit: bwaidx
 
     script:
     """
@@ -55,25 +58,30 @@ process REFINDEX {
 process QCONTROL{
     tag "${sid}"
     cpus params.cpus
-    publishDir "${params.outdir}/QCONTROL"
+//    publishDir "${params.outdir}/QCONTROL"
+    cpus params.cpus
+//	  debug true
+//    errorStrategy 'ignore'
 
     input:
     tuple val(sid), path(reads)
 
     output:
     tuple val(sid), path(fq_1_trimmed), path(fq_2_trimmed), emit: trimmed_reads
-            file("${sid}.fastp_stats.html")
+    path '*.html', emit: html, optional: true
+    path '*.json', emit: json, optional: true
 
     script:
     fq_1_trimmed = sid + '_R1_P.fastq.gz'
     fq_2_trimmed = sid + '_R2_P.fastq.gz'
     """
-    fastp -q 20 -l 140 --trim_poly_g --thread ${task.cpus} \
+    fastp -q 20 -l 20 --trim_poly_g --thread ${task.cpus} \
     --in1 ${reads[0]} \
     --in2 ${reads[1]}\
     --out1 $fq_1_trimmed \
     --out2 $fq_2_trimmed \
-    --html ${sid}.fastp_stats.html
+    --html ${sid}.fastp_stats.html \
+    --json ${sid}.fastp_stats.json
     """
 }
 
@@ -82,7 +90,9 @@ process ALIGN {
     tag "$reference ${sid}"
     cpus params.cpus
 //    publishDir "${params.outdir}/ALIGN"
-    debug true
+    cpus params.cpus
+//	  debug true
+//    errorStrategy 'ignore'
 
     input:
     tuple val(sid), path(reads1), path(reads2)
@@ -90,7 +100,7 @@ process ALIGN {
     path idx
     
     output:
-    path "${sid}.sorted.bam"
+    path "${sid}.sorted.bam", emit: bam
     script:
     """
     bwa mem \
@@ -105,14 +115,16 @@ process ALIGN {
 process PREPARE {
     tag "$bamFile $reference"
 //    publishDir "${params.outdir}/PREPARE"
-	
+    cpus params.cpus
+//	  debug true
+//    errorStrategy 'ignore'
     input:
     path reference
     path bamFile
 
     output:
-    file '*.sorted.bam.bai'
-    file '*.fai'
+    path '*.sorted.bam.bai', emit: bai
+    path '*.fai', emit: fai
 
     script:
     """
@@ -126,6 +138,8 @@ process VARCALL {
     tag "$reference $bamFile"
 //    publishDir "${params.outdir}/VARCALL"
     cpus params.cpus
+//	  debug true
+//    errorStrategy 'ignore'
 	
     input:
     path reference
@@ -134,9 +148,9 @@ process VARCALL {
     path fai
 
     output:
-    file "${bamFile.baseName}.vcf.gz"
-    file "${bamFile.baseName}.g.vcf.gz"
-    file '*.html'
+    path "${bamFile.baseName}.vcf.gz", emit:vcf
+    path "${bamFile.baseName}.g.vcf.gz", emit: gvcf
+    path '*.html', emit: html
     
     script:
     """
@@ -154,15 +168,15 @@ process VARCALL {
 process ANNOTATE {
     tag "$vcf"
     publishDir "${params.outdir}/ANNOTATE"
-	debug true
     cpus params.cpus
-    errorStrategy 'ignore'
+//	  debug true
+//    errorStrategy 'ignore'
 	
     input:
     path vcf
 
     output:
-    file '*.vep.vcf'
+    path '*.vep.vcf', emit: vep
 
     script:
     """
@@ -176,28 +190,51 @@ process ANNOTATE {
     """
 }
 
+
+// Define the `REPORT` process that performs report
+process REPORT {
+    tag "$json"
+    publishDir "${params.outdir}/REPORT"
+    cpus params.cpus
+//	  debug true
+//    errorStrategy 'ignore'
+	
+    input:
+    path json
+
+    output:
+    path '*', emit: html
+
+    script:
+    """
+    multiqc $json
+    """
+}
+
 // Define the input channel for FASTQ files, if provided
 input_fastqs = params.reads ? Channel.fromFilePairs(params.reads, checkIfExists: true) : null
 
 // Define the input channel for bwa index files, if provided
-idx = params.bwaidx ? Channel.fromPath(params.bwaidx, checkIfExists: true).collect() : null
+bwaidx = params.bwaidx ? Channel.fromPath(params.bwaidx, checkIfExists: true).collect() : null
 
 // Define the workflow
 workflow {
     if( params.prebuild_idx == true ) {
         QCONTROL(input_fastqs)
-        ALIGN(QCONTROL.out[0], params.reference, idx)
-        PREPARE(params.reference, ALIGN.out)
-        VARCALL(params.reference, ALIGN.out, PREPARE.out[0], PREPARE.out[1])
-        ANNOTATE(VARCALL.out[0])
+        ALIGN(QCONTROL.out.trimmed_reads, params.reference, bwaidx)
+        PREPARE(params.reference, ALIGN.out.bam)
+        VARCALL(params.reference, ALIGN.out.bam, PREPARE.out.bai, PREPARE.out.fai)
+        ANNOTATE(VARCALL.out.vcf)
+        REPORT(QCONTROL.out.json.collect())
     }
     else {
         REFINDEX(params.reference)
         QCONTROL(input_fastqs)
-        ALIGN(QCONTROL.out[0], params.reference, REFINDEX.out)
-        PREPARE(params.reference, ALIGN.out)
-        VARCALL(params.reference, ALIGN.out, PREPARE.out[0], PREPARE.out[1])
-        ANNOTATE(VARCALL.out[0])
+        ALIGN(QCONTROL.out.trimmed_reads, params.reference, REFINDEX.out)
+        PREPARE(params.reference, ALIGN.out.bam)
+        VARCALL(params.reference, ALIGN.out.bam, PREPARE.out.bai, PREPARE.out.fai)
+        ANNOTATE(VARCALL.out.vcf)
+        REPORT(QCONTROL.out.json.collect())
     }
 }
 
