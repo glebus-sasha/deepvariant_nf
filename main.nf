@@ -51,11 +51,18 @@ input_fastqs = params.reads ? Channel.fromFilePairs(params.reads, checkIfExists:
 // Define the input channel for bwa index files, if provided
 bwaidx = params.bwaidx ? Channel.fromPath(params.bwaidx, checkIfExists: true).collect() : null
 
+
 // Define the workflow
 workflow {
+    // Make the pipeline reports directory if it needs
+    if (params.reports) {
+        def pipeline_report_dir = new File("${params.outdir}/pipeline_info")
+        pipeline_report_dir.mkdirs()
+    }
+
     QCONTROL(input_fastqs)
     TRIM(input_fastqs)
-    if( params.prebuild_idx == false ) {
+    if( !params.prebuild ) {
         REFINDEX(params.reference)
         ALIGN(TRIM.out.trimmed_reads, params.reference, REFINDEX.out)
     }

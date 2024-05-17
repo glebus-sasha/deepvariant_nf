@@ -2,7 +2,7 @@
 process QCONTROL{
     tag "${sid}"
     cpus params.cpus
-    publishDir "${params.outdir}/QCONTROL"
+    publishDir "${params.outdir}/QCONTROL", pattern: '*.html'
 //	  debug true
 //    errorStrategy 'ignore'
 
