@@ -196,7 +196,7 @@ process VARCALL {
     tag "$reference $bamFile"
     publishDir "${params.outdir}/VARCALL"
     cpus params.cpus
-    debug true
+//    debug true
     errorStrategy 'ignore'
 	
     input:
@@ -235,12 +235,14 @@ process ANNOTATE {
 
     output:
     path '*.vep.vcf', emit: vep
+    path '*.vep.html', emit: html
 
     script:
     """
     vep \
     -i $vcf \
     -o ${vcf.baseName}.vep.vcf \
+    --stats_file ${vcf.baseName}.vep.html \
     --database \
     --fork $task.cpus \
     --everything \
@@ -262,13 +264,14 @@ process REPORT {
     path fastqc
     path flagstat
     path qualimap
+    path vep
 
     output:
     path '*.html', emit: html
 
     script:
     """
-    multiqc $fastqc $fastp $flagstat $qualimap
+    multiqc $fastqc $fastp $flagstat $qualimap $vep
     """
 }
 
@@ -294,7 +297,7 @@ workflow {
     PREPARE(params.reference, ALIGN.out.bam)
     VARCALL(params.reference, ALIGN.out.bam, PREPARE.out.bai, PREPARE.out.fai)
     ANNOTATE(VARCALL.out.vcf)
-    REPORT(TRIM.out.json.collect(), QCONTROL.out.zip.collect(), FLAGSTAT.out.flagstat.collect(), QUALIMAP.out.collect())
+    REPORT(TRIM.out.json.collect(), QCONTROL.out.zip.collect(), FLAGSTAT.out.flagstat.collect(), QUALIMAP.out.collect(), ANNOTATE.out.html.collect())
 }
 
 // Log pipeline execution summary on completion
