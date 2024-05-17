@@ -36,12 +36,12 @@ flowchart TB
 ```mermaid
 %%{init: {'theme':'base'}}%%
 flowchart TB
-    subgraph " "
+    subgraph "input"
     v0["reads"]
     v1["reference"]
     end
     v3([QCONTROL])
-    subgraph " "
+    subgraph "output"
     v4[" "]
     v6[" "]
     v15[" "]
@@ -69,7 +69,6 @@ flowchart TB
     v3 --> v4
     v3 --> v20
     v5 --> v8
-    v5 --> v6
     v5 --> v19
     v1 --> v8
     v2 --> v8
