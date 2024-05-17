@@ -33,6 +33,67 @@ flowchart TB
     v10 --> v13
     v13 --> v14
 ```
+```mermaid
+%%{init: {'theme':'base'}}%%
+flowchart TB
+    subgraph " "
+    v0["reads"]
+    v1["reference"]
+    end
+    v3([QCONTROL])
+    subgraph " "
+    v4[" "]
+    v6[" "]
+    v15[" "]
+    v16[" "]
+    v18[" "]
+    v25[" "]
+    end
+    v5([TRIM])
+    v8([ALIGN])
+    v9([FLAGSTAT])
+    v10([QUALIMAP])
+    v12([PREPARE])
+    v14([VARCALL])
+    v17([ANNOTATE])
+    v24([REPORT])
+    v2(( ))
+    v19(( ))
+    v20(( ))
+    v21(( ))
+    v22(( ))
+    v23(( ))
+    v0 --> v3
+    v0 --> v5
+    v1 --> v2
+    v3 --> v4
+    v3 --> v20
+    v5 --> v8
+    v5 --> v6
+    v5 --> v19
+    v1 --> v8
+    v2 --> v8
+    v8 --> v9
+    v8 --> v10
+    v8 --> v12
+    v8 --> v14
+    v9 --> v21
+    v10 --> v22
+    v1 --> v12
+    v12 --> v14
+    v1 --> v14
+    v14 --> v17
+    v14 --> v16
+    v14 --> v15
+    v17 --> v18
+    v17 --> v23
+    v19 --> v24
+    v20 --> v24
+    v21 --> v24
+    v22 --> v24
+    v23 --> v24
+    v24 --> v25
+```
 
 ## Description
 
