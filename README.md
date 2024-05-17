@@ -9,44 +9,14 @@ flowchart TB
     v0["reads"]
     v1["reference"]
     end
-    v2([REFINDEX])
     v3([QCONTROL])
     subgraph "output"
-    v4["quality report"]
-    v14["VCF"]
-    end
-    v6([ALIGN])
-    v8([PREPARE])
-    v10([VARCALL])
-    v13([ANNOTATE])
-    v0 --> v3
-    v1 --> v2
-    v2 --> v6
-    v3 --> v4
-    v1 --> v6
-    v6 --> v8
-    v6 --> v10
-    v1 --> v8
-    v8 --> v10
-    v1 --> v10
-    v10 --> v13
-    v13 --> v14
-```
-```mermaid
-%%{init: {'theme':'base'}}%%
-flowchart TB
-    subgraph "input"
-    v0["reads"]
-    v1["reference"]
-    end
-    v3([QCONTROL])
-    subgraph "output"
-    v4[" "]
-    v6[" "]
-    v15[" "]
-    v16[" "]
-    v18[" "]
-    v25[" "]
+    v4["4"]
+    v6["6"]
+    v15["15"]
+    v16["16"]
+    v18["18"]
+    v25["25"]
     end
     v5([TRIM])
     v8([ALIGN])
