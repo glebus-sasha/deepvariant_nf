@@ -11,7 +11,7 @@ flowchart TB
     end
     v3([QCONTROL])
     subgraph "output"
-    v18["vep-vcf"]
+    v18["vcf"]
     v25["html"]
     end
     v5([TRIM])
