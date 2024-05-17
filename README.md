@@ -9,29 +9,51 @@ flowchart TB
     v0["reads"]
     v1["reference"]
     end
-    v2([REFINDEX])
     v3([QCONTROL])
     subgraph "output"
-    v4["quality report"]
-    v14["VCF"]
+    v18["vcf"]
+    v25["html"]
     end
-    v6([ALIGN])
-    v8([PREPARE])
-    v10([VARCALL])
-    v13([ANNOTATE])
+    v5([TRIM])
+    v8([ALIGN])
+    v9([FLAGSTAT])
+    v10([QUALIMAP])
+    v12([PREPARE])
+    v14([VARCALL])
+    v17([ANNOTATE])
+    v24([REPORT])
+    v2(( ))
+    v19(( ))
+    v20(( ))
+    v21(( ))
+    v22(( ))
+    v23(( ))
     v0 --> v3
+    v0 --> v5
     v1 --> v2
-    v2 --> v6
-    v3 --> v6
-    v3 --> v4
-    v1 --> v6
-    v6 --> v8
-    v6 --> v10
+    v3 --> v20
+    v5 --> v8
+    v5 --> v19
     v1 --> v8
+    v2 --> v8
+    v8 --> v9
     v8 --> v10
-    v1 --> v10
-    v10 --> v13
-    v13 --> v14
+    v8 --> v12
+    v8 --> v14
+    v9 --> v21
+    v10 --> v22
+    v1 --> v12
+    v12 --> v14
+    v1 --> v14
+    v14 --> v17
+    v17 --> v18
+    v17 --> v23
+    v19 --> v24
+    v20 --> v24
+    v21 --> v24
+    v22 --> v24
+    v23 --> v24
+    v24 --> v25
 ```
 
 ## Description
@@ -39,11 +61,14 @@ flowchart TB
 The pipeline is implemented in Nextflow and includes several stages for NGS data analysis:
 
 1. **REFINDEX:** Index creation using BWA (Burrows-Wheeler Aligner).
-2. **QCONTROL:** Data preprocessing using Fastp.
-3. **ALIGN:** Sequence alignment using BWA mem.
-4. **PREPARE:** File processing and preparation using Samtools.
-5. **VARCALL:** Variant calling using deepvariant.
-6. **ANNOTATE:** Annotation using vep.
+2. **QCONTROL** Quality control using FastQC.
+3. **TRIM:** Data preprocessing using Fastp.
+4. **ALIGN:** Sequence alignment using BWA mem.
+5. **FLAGSTAT:** Alignment quality control using Samtools flagstat.
+6. **PREPARE:** File processing and preparation using Samtools.
+7. **VARCALL:** Variant calling using deepvariant.
+8. **ANNOTATE:** Annotation using VEP (Variant Effect Predictor).
+9. **REPORT:** COmpiling report using MultiQC.
 
 ## Usage
 
