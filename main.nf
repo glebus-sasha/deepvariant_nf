@@ -36,7 +36,7 @@ if ( params.help ) {
 // Define the `REFINDEX` process that creates the index of the genome
 process REFINDEX {
     tag "$reference"
-//    publishDir "${params.outdir}/REFINDEX"
+    publishDir "${params.outdir}/REFINDEX"
     cpus params.cpus
 //	  debug true
 //    errorStrategy 'ignore'
@@ -58,8 +58,27 @@ process REFINDEX {
 process QCONTROL{
     tag "${sid}"
     cpus params.cpus
-//    publishDir "${params.outdir}/QCONTROL"
+    publishDir "${params.outdir}/QCONTROL"
+//	  debug true
+//    errorStrategy 'ignore'
+
+    input:
+    tuple val(sid), path(reads)
+
+    output:
+    path "*.html", emit: html
+    path "*.zip", emit: zip
+
+    """
+    fastqc $reads
+    """
+}
+
+// Define the `TRIM` process that performs quality trimming and filtering of reads
+process TRIM{
+    tag "${sid}"
     cpus params.cpus
+    publishDir "${params.outdir}/TRIM"
 //	  debug true
 //    errorStrategy 'ignore'
 
@@ -89,8 +108,7 @@ process QCONTROL{
 process ALIGN {
     tag "$reference ${sid}"
     cpus params.cpus
-//    publishDir "${params.outdir}/ALIGN"
-    cpus params.cpus
+    publishDir "${params.outdir}/ALIGN"
 //	  debug true
 //    errorStrategy 'ignore'
 
@@ -101,20 +119,60 @@ process ALIGN {
     
     output:
     path "${sid}.sorted.bam", emit: bam
+    
     script:
     """
     bwa mem \
-    -R "@RG\\tID:\\tSM:\\tLB:\\tPU:" \
     -t ${task.cpus} ${reference} ${reads1} ${reads2} | \
     samtools view -bh | \
     samtools sort -o ${sid}.sorted.bam
     """
 }
 
+// Define the `FLAGSTAT` process that aligns stats
+process FLAGSTAT {
+    tag "$bamFile"
+    cpus params.cpus
+    publishDir "${params.outdir}/FLAGSTAT"
+//	  debug true
+//    errorStrategy 'ignore'
+
+    input:
+    path bamFile
+    
+    output:
+    path "*.flagstat", emit: flagstat
+    
+    script:
+    """
+    samtools flagstat $bamFile > ${bamFile.baseName}.flagstat
+    """
+}
+
+// Define the `QUALIMAP` process that aligns stats
+process QUALIMAP {
+    tag "$bamFile"
+    cpus params.cpus
+    publishDir "${params.outdir}/QUALIMAP"
+//	  debug true
+//    errorStrategy 'ignore'
+
+    input:
+    path bamFile
+    
+    output:
+    path "*"
+    
+    script:
+    """
+    qualimap bamqc -bam $bamFile
+    """
+}
+
 // Define the `PREPARE` process that prepares the reference genome indices
 process PREPARE {
     tag "$bamFile $reference"
-//    publishDir "${params.outdir}/PREPARE"
+    publishDir "${params.outdir}/PREPARE"
     cpus params.cpus
 //	  debug true
 //    errorStrategy 'ignore'
@@ -136,10 +194,10 @@ process PREPARE {
 // Define the `VARCALL` process that performs variant calling
 process VARCALL {
     tag "$reference $bamFile"
-//    publishDir "${params.outdir}/VARCALL"
+    publishDir "${params.outdir}/VARCALL"
     cpus params.cpus
-//	  debug true
-//    errorStrategy 'ignore'
+    debug true
+    errorStrategy 'ignore'
 	
     input:
     path reference
@@ -155,7 +213,7 @@ process VARCALL {
     script:
     """
     /opt/deepvariant/bin/run_deepvariant \
-    --model_type=WGS \
+    --model_type=WES \
     --ref=$reference \
     --reads=$bamFile \
     --output_vcf=${bamFile.baseName}.vcf.gz \
@@ -170,7 +228,7 @@ process ANNOTATE {
     publishDir "${params.outdir}/ANNOTATE"
     cpus params.cpus
 //	  debug true
-//    errorStrategy 'ignore'
+    errorStrategy 'ignore'
 	
     input:
     path vcf
@@ -193,21 +251,24 @@ process ANNOTATE {
 
 // Define the `REPORT` process that performs report
 process REPORT {
-    tag "$json"
+    tag "$flagstat"
     publishDir "${params.outdir}/REPORT"
     cpus params.cpus
 //	  debug true
 //    errorStrategy 'ignore'
 	
     input:
-    path json
+    path fastp
+    path fastqc
+    path flagstat
+    path qualimap
 
     output:
-    path '*', emit: html
+    path '*.html', emit: html
 
     script:
     """
-    multiqc $json
+    multiqc $fastqc $fastp $flagstat $qualimap
     """
 }
 
@@ -219,23 +280,21 @@ bwaidx = params.bwaidx ? Channel.fromPath(params.bwaidx, checkIfExists: true).co
 
 // Define the workflow
 workflow {
-    if( params.prebuild_idx == true ) {
-        QCONTROL(input_fastqs)
-        ALIGN(QCONTROL.out.trimmed_reads, params.reference, bwaidx)
-        PREPARE(params.reference, ALIGN.out.bam)
-        VARCALL(params.reference, ALIGN.out.bam, PREPARE.out.bai, PREPARE.out.fai)
-        ANNOTATE(VARCALL.out.vcf)
-        REPORT(QCONTROL.out.json.collect())
+    QCONTROL(input_fastqs)
+    TRIM(input_fastqs)
+    if( params.prebuild_idx == false ) {
+        REFINDEX(params.reference)
+        ALIGN(TRIM.out.trimmed_reads, params.reference, REFINDEX.out)
     }
     else {
-        REFINDEX(params.reference)
-        QCONTROL(input_fastqs)
-        ALIGN(QCONTROL.out.trimmed_reads, params.reference, REFINDEX.out)
-        PREPARE(params.reference, ALIGN.out.bam)
-        VARCALL(params.reference, ALIGN.out.bam, PREPARE.out.bai, PREPARE.out.fai)
-        ANNOTATE(VARCALL.out.vcf)
-        REPORT(QCONTROL.out.json.collect())
+        ALIGN(TRIM.out.trimmed_reads, params.reference, bwaidx)
     }
+    FLAGSTAT(ALIGN.out.bam)
+    QUALIMAP(ALIGN.out.bam)
+    PREPARE(params.reference, ALIGN.out.bam)
+    VARCALL(params.reference, ALIGN.out.bam, PREPARE.out.bai, PREPARE.out.fai)
+    ANNOTATE(VARCALL.out.vcf)
+    REPORT(TRIM.out.json.collect(), QCONTROL.out.zip.collect(), FLAGSTAT.out.flagstat.collect(), QUALIMAP.out.collect())
 }
 
 // Log pipeline execution summary on completion
