@@ -22,7 +22,6 @@ flowchart TB
     v0 --> v3
     v1 --> v2
     v2 --> v6
-    v3 --> v6
     v3 --> v4
     v1 --> v6
     v6 --> v8
