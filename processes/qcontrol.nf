@@ -1,5 +1,6 @@
 // Define the `QCONTROL` process that performs quality trimming and filtering of reads
 process QCONTROL{
+    container = 'staphb/fastqc:0.12.1'
     tag "${sid}"
     cpus params.cpus
     publishDir "${params.outdir}/QCONTROL", pattern: '*.html'

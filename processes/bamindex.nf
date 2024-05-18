@@ -1,21 +1,19 @@
-// Define the `PREPARE` process that prepares the reference genome indices
-process PREPARE {
+// Define the `BAMINDEX` process that prepares the bam file indices
+process BAMINDEX {
+    container = 'glebusasha/bwa_samtools'
     tag "$bamFile $reference"
-    publishDir "${params.outdir}/PREPARE"
+    publishDir "${params.outdir}/BAMINDEX"
     cpus params.cpus
 //	  debug true
 //    errorStrategy 'ignore'
     input:
-    path reference
     path bamFile
 
     output:
     path '*.sorted.bam.bai', emit: bai
-    path '*.fai', emit: fai
 
     script:
     """
 	samtools index ${bamFile.baseName}.bam
-    samtools faidx "$reference"
     """
 }

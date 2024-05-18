@@ -1,5 +1,6 @@
 // Define the `ALIGN` process that aligns reads to the reference genome
 process ALIGN {
+    container = 'glebusasha/bwa_samtools'
     tag "$reference ${sid}"
     cpus params.cpus
     publishDir "${params.outdir}/ALIGN"

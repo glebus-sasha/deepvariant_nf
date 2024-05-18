@@ -1,5 +1,6 @@
 // Define the `VARCALL` process that performs variant calling
 process VARCALL {
+    container = 'google/deepvariant:1.6.1'
     tag "$reference $bamFile"
     publishDir "${params.outdir}/VARCALL"
     cpus params.cpus

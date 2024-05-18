@@ -1,5 +1,6 @@
 // Define the `REPORT` process that performs report
 process REPORT {
+    container = 'staphb/multiqc:latest'
     tag "$flagstat"
     publishDir "${params.outdir}/REPORT"
     cpus params.cpus

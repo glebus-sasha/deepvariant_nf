@@ -1,5 +1,6 @@
 // Define the `ANNOTATE` process that performs annotation
 process ANNOTATE {
+    container = 'mgibio/vep_helper-cwl:vep_105.0_v1'
     tag "$vcf"
     publishDir "${params.outdir}/ANNOTATE"
     cpus params.cpus

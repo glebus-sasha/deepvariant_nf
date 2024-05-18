@@ -1,5 +1,6 @@
 // Define the `FLAGSTAT` process that aligns stats
 process FLAGSTAT {
+    container = 'glebusasha/bwa_samtools'
     tag "$bamFile"
     cpus params.cpus
     publishDir "${params.outdir}/FLAGSTAT"

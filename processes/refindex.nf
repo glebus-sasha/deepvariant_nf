@@ -1,5 +1,6 @@
 // Define the `REFINDEX` process that creates the index of the genome
 process REFINDEX {
+    container = 'glebusasha/bwa_samtools'
     tag "$reference"
     publishDir "${params.outdir}/REFINDEX"
     cpus params.cpus

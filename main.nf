@@ -1,17 +1,19 @@
 #!/usr/bin/env nextflow
 
 // Include processes
-include { REFINDEX   } from './processes/refindex.nf'
-include { QCONTROL   } from './processes/qcontrol.nf'
-include { TRIM   } from './processes/trim.nf'
-include { ALIGN   } from './processes/align.nf'
-include { FLAGSTAT   } from './processes/flagstat.nf'
-include { QUALIMAP   } from './processes/qualimap.nf'
-include { PREPARE   } from './processes/prepare.nf'
-include { VARCALL   } from './processes/varcall.nf'
-include { ANNOTATE   } from './processes/annotate.nf'
-include { REPORT   } from './processes/report.nf'
+include { REFINDEX } from './processes/refindex.nf'
+include { QCONTROL } from './processes/qcontrol.nf'
+include { TRIM } from './processes/trim.nf'
+include { ALIGN } from './processes/align.nf'
+include { FLAGSTAT } from './processes/flagstat.nf'
+include { QUALIMAP } from './processes/qualimap.nf'
+include { FAINDEX } from './processes/faindex.nf'
+include { BAMINDEX } from './processes/bamindex.nf'
+include { VARCALL } from './processes/varcall.nf'
+include { ANNOTATE } from './processes/annotate.nf'
+include { REPORT } from './processes/report.nf'
 
+// Logging pipeline information
 log.info """\
     ==========================================
      D E E P V A R I A N T   P I P E L I N E
@@ -71,8 +73,9 @@ workflow {
     }
     FLAGSTAT(ALIGN.out.bam)
     QUALIMAP(ALIGN.out.bam)
-    PREPARE(params.reference, ALIGN.out.bam)
-    VARCALL(params.reference, ALIGN.out.bam, PREPARE.out.bai, PREPARE.out.fai)
+    FAINDEX(params.reference)
+    BAMINDEX(ALIGN.out.bam)
+    VARCALL(params.reference, ALIGN.out.bam, BAMINDEX.out.bai, FAINDEX.out.fai)
     ANNOTATE(VARCALL.out.vcf)
     REPORT(TRIM.out.json.collect(), QCONTROL.out.zip.collect(), FLAGSTAT.out.flagstat.collect(), QUALIMAP.out.collect(), ANNOTATE.out.html.collect())
 }
