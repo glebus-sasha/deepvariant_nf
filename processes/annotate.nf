@@ -9,8 +9,6 @@ process ANNOTATE {
 	
     input:
     path vcf
-    path clinvar_gz
-    path clinvar_gz_tbi
 
     output:
     path '*.vep.vcf', emit: vep
@@ -27,6 +25,6 @@ process ANNOTATE {
     --dir ${params.vepcache} \
     --vcf \ 
     --everything \
-    --custom file=${clinvar_gz},short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN
+    --custom file=${params.vepcache}/clinvar.vcf.gz,short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN
     """
 }

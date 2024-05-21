@@ -58,7 +58,6 @@ bwaidx = params.bwaidx ? Channel.fromPath(params.bwaidx, checkIfExists: true).co
 
 
 // Define the input channels for Clinvar files and indeces, if provided
-clinvar_cache = params.bwaidx ? Channel.fromPath("${params.vepcache}", checkIfExists: true) : null
 clinvar_gz = params.bwaidx ? Channel.fromPath("${params.vepcache}/clinvar.vcf.gz", checkIfExists: true) : null
 clinvar_gz_tbi = params.bwaidx ? Channel.fromPath("${params.vepcache}/clinvar.vcf.gz.tbi", checkIfExists: true) : null
 
@@ -80,12 +79,7 @@ workflow {
     FAINDEX(params.reference)
     BAMINDEX(ALIGN.out.bam)
     VARCALL(params.reference, ALIGN.out.bam, BAMINDEX.out.bai, FAINDEX.out.fai)
-    if( !params.prebuild ) {
-        ANNOTATE(VARCALL.out.vcf, DOWNLOAD_VEP_CACHE.out.vep_cache, DOWNLOAD_VEP_CACHE.out.clinvar_gz, DOWNLOAD_VEP_CACHE.out.clinvar_gzi)
-    }
-    else{
-        ANNOTATE(VARCALL.out.vcf, clinvar_cache, clinvar_gz, clinvar_gz_tbi)
-    }
+    ANNOTATE(VARCALL.out.vcf)
     REPORT(TRIM.out.json.collect(), QCONTROL.out.zip.collect(), FLAGSTAT.out.flagstat.collect(), QUALIMAP.out.collect(), ANNOTATE.out.html.collect())
     
     // Make the pipeline reports directory if it needs
