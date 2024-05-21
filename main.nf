@@ -79,7 +79,7 @@ workflow {
     REPORT(TRIM.out.json.collect(), QCONTROL.out.zip.collect(), FLAGSTAT.out.flagstat.collect(), QUALIMAP.out.collect(), ANNOTATE.out.html.collect())
     // Make the pipeline reports directory if it needs
     if ( params.reports ) {
-        def pipeline_report_dir = new File("${params.outdir}/pipeline_info")
+        def pipeline_report_dir = new File("${params.outdir}/${workflow.start}[${workflow.runName}]/pipeline_info")
         pipeline_report_dir.mkdirs()
     }
 }
