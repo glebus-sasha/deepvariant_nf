@@ -3,7 +3,7 @@ process QCONTROL{
     container = 'staphb/fastqc:0.12.1'
     tag "${sid}"
     cpus params.cpus
-    publishDir "${params.outdir}/QCONTROL", pattern: '*.html'
+    publishDir "${params.outdir}/${workflow.start}[${workflow.runName}]/QCONTROL", pattern: '*.html'
 //	  debug true
 //    errorStrategy 'ignore'
 

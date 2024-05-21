@@ -3,7 +3,7 @@ process TRIM{
     container = 'nanozoo/fastp:0.23.1--9f2e255'
     tag "${sid}"
     cpus params.cpus
-    publishDir "${params.outdir}/TRIM"
+    publishDir "${params.outdir}/${workflow.start}[${workflow.runName}]/TRIM"
 //	  debug true
 //    errorStrategy 'ignore'
 
@@ -19,7 +19,9 @@ process TRIM{
     fq_1_trimmed = sid + '_R1_P.fastq.gz'
     fq_2_trimmed = sid + '_R2_P.fastq.gz'
     """
-    fastp -q 20 -l 20 --trim_poly_g --thread ${task.cpus} \
+    fastp -q 30 -l 20 \
+    --trim_poly_g \
+    --thread ${task.cpus} \
     --in1 ${reads[0]} \
     --in2 ${reads[1]}\
     --out1 $fq_1_trimmed \

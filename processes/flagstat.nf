@@ -3,7 +3,7 @@ process FLAGSTAT {
     container = 'glebusasha/bwa_samtools'
     tag "$bamFile"
     cpus params.cpus
-    publishDir "${params.outdir}/FLAGSTAT"
+    publishDir "${params.outdir}/${workflow.start}[${workflow.runName}]/FLAGSTAT"
 //	  debug true
 //    errorStrategy 'ignore'
 

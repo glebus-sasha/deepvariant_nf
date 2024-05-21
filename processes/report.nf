@@ -2,7 +2,7 @@
 process REPORT {
     container = 'staphb/multiqc:latest'
     tag "$flagstat"
-    publishDir "${params.outdir}/REPORT"
+    publishDir "${params.outdir}/${workflow.start}[${workflow.runName}]/REPORT"
     cpus params.cpus
 //	  debug true
 //    errorStrategy 'ignore'

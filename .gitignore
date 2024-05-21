@@ -1,8 +1,9 @@
 #custom
 .nextflow*
-data/
-work/
-results/
+data
+work
+results
+test_data
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
