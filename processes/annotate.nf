@@ -22,10 +22,10 @@ process ANNOTATE {
     -i $vcf \
     -o ${vcf.baseName}.vep.vcf \
     --stats_file ${vcf.baseName}.vep.html \
+    --fork ${task.cpus} \
     --cache \
     --dir ${params.vepcache} \
     --vcf \ 
-    --fork $task.cpus \
     --everything \
     --custom file=${clinvar_gz},short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN
     """

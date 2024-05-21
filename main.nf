@@ -56,34 +56,38 @@ input_fastqs = params.reads ? Channel.fromFilePairs(params.reads, checkIfExists:
 // Define the input channel for bwa index files, if provided
 bwaidx = params.bwaidx ? Channel.fromPath(params.bwaidx, checkIfExists: true).collect() : null
 
+
+// Define the input channels for Clinvar files and indeces, if provided
+clinvar_cache = params.bwaidx ? Channel.fromPath("${params.vepcache}", checkIfExists: true) : null
+clinvar_gz = params.bwaidx ? Channel.fromPath("${params.vepcache}/clinvar.vcf.gz", checkIfExists: true) : null
+clinvar_gz_tbi = params.bwaidx ? Channel.fromPath("${params.vepcache}/clinvar.vcf.gz.tbi", checkIfExists: true) : null
+
 // Define the workflow
 workflow {
     QCONTROL(input_fastqs)
     TRIM(input_fastqs)
     if( !params.prebuild ) {
         new File("$params.vepcache").mkdirs() // Make the VEP cache  directory if it needs
-//        REFINDEX(params.reference)
-//        ALIGN(TRIM.out.trimmed_reads, params.reference, REFINDEX.out)
+        REFINDEX(params.reference)
+        ALIGN(TRIM.out.trimmed_reads, params.reference, REFINDEX.out)
         DOWNLOAD_VEP_CACHE(params.vepcache)
     }
     else {
-//        ALIGN(TRIM.out.trimmed_reads, params.reference, bwaidx)
+        ALIGN(TRIM.out.trimmed_reads, params.reference, bwaidx)
     }
-//    FLAGSTAT(ALIGN.out.bam)
-//    QUALIMAP(ALIGN.out.bam)
-//    FAINDEX(params.reference)
-//    BAMINDEX(ALIGN.out.bam)
-//    VARCALL(params.reference, ALIGN.out.bam, BAMINDEX.out.bai, FAINDEX.out.fai)
-
-    // Define the input channel for Clinvar files, if provided
-    clinvar_gz = 1
-    clinvar_gz_tbi = 2
-//    clinvar_gz = params.bwaidx ? Channel.fromPath("${params.vepcache}/clinvar.vcf.gz", checkIfExists: true) : null
-    // Define the input channel for Clinvar index files, if provided
-//    clinvar_gz_tbi = params.bwaidx ? Channel.fromPath("${params.vepcache}/clinvar.vcf.gz.tbi", checkIfExists: true) : null
-
-//    ANNOTATE(VARCALL.out.vcf, clinvar_gz, clinvar_gz_tbi)
-//    REPORT(TRIM.out.json.collect(), QCONTROL.out.zip.collect(), FLAGSTAT.out.flagstat.collect(), QUALIMAP.out.collect(), ANNOTATE.out.html.collect())
+    FLAGSTAT(ALIGN.out.bam)
+    QUALIMAP(ALIGN.out.bam)
+    FAINDEX(params.reference)
+    BAMINDEX(ALIGN.out.bam)
+    VARCALL(params.reference, ALIGN.out.bam, BAMINDEX.out.bai, FAINDEX.out.fai)
+    if( !params.prebuild ) {
+        ANNOTATE(VARCALL.out.vcf, DOWNLOAD_VEP_CACHE.out.vep_cache, DOWNLOAD_VEP_CACHE.out.clinvar_gz, DOWNLOAD_VEP_CACHE.out.clinvar_gzi)
+    }
+    else{
+        ANNOTATE(VARCALL.out.vcf, clinvar_cache, clinvar_gz, clinvar_gz_tbi)
+    }
+    REPORT(TRIM.out.json.collect(), QCONTROL.out.zip.collect(), FLAGSTAT.out.flagstat.collect(), QUALIMAP.out.collect(), ANNOTATE.out.html.collect())
+    
     // Make the pipeline reports directory if it needs
     if ( params.reports ) {
         def pipeline_report_dir = new File("${params.outdir}/${workflow.start}[${workflow.runName}]/pipeline_info")

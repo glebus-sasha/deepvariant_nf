@@ -10,15 +10,19 @@ process DOWNLOAD_VEP_CACHE {
     input:
     path cache_dir
 
+    output:
+    path 'homo_sapiens', emit: vep_cache
+    path 'clinvar.vcf.gz', emit: clinvar_gz
+    path 'clinvar.vcf.gz.tbi', emit; clinvar_gzi
+
     script:
     """
     INSTALL.pl \
-    -c $cache_dir \
+    -c ./ \
     -a cf \
     -s homo_sapiens \
     -y GRCh38
-    wget https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz -o $cache_dir/clinvar.vcf.gz
-    wget https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz.tbi -o $cache_dir/clinvar.vcf.gz.tbi
-    
+    wget https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz
+    wget https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz.tbi
     """
 }
