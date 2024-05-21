@@ -4,8 +4,8 @@ process ANNOTATE {
     tag "$vcf"
     publishDir "${params.outdir}/${workflow.start}[${workflow.runName}]/ANNOTATE"
     cpus params.cpus
-//	  debug true
-    errorStrategy 'ignore'
+	  debug true
+//    errorStrategy 'ignore'
 	
     input:
     path vcf
