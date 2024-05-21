@@ -59,12 +59,6 @@ bwaidx = params.bwaidx ? Channel.fromPath(params.bwaidx, checkIfExists: true).co
 
 // Define the workflow
 workflow {
-    // Make the pipeline reports directory if it needs
-    if ( params.reports ) {
-        def pipeline_report_dir = new File("${params.outdir}/pipeline_info")
-        pipeline_report_dir.mkdirs()
-    }
-
     QCONTROL(input_fastqs)
     TRIM(input_fastqs)
     if( !params.prebuild ) {
@@ -83,6 +77,11 @@ workflow {
     VARCALL(params.reference, ALIGN.out.bam, BAMINDEX.out.bai, FAINDEX.out.fai)
     ANNOTATE(VARCALL.out.vcf)
     REPORT(TRIM.out.json.collect(), QCONTROL.out.zip.collect(), FLAGSTAT.out.flagstat.collect(), QUALIMAP.out.collect(), ANNOTATE.out.html.collect())
+    // Make the pipeline reports directory if it needs
+    if ( params.reports ) {
+        def pipeline_report_dir = new File("${params.outdir}/pipeline_info")
+        pipeline_report_dir.mkdirs()
+    }
 }
 
 // Log pipeline execution summary on completion
