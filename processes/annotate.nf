@@ -1,6 +1,6 @@
 // Define the `ANNOTATE` process that performs annotation
 process ANNOTATE {
-    container = 'mgibio/vep_helper-cwl:vep_105.0_v1'
+    container = 'ensemblorg/ensembl-vep:latest'
     tag "$vcf"
     publishDir "${params.outdir}/${workflow.start}[${workflow.runName}]/ANNOTATE"
     cpus params.cpus
@@ -24,7 +24,7 @@ process ANNOTATE {
     --fork ${task.cpus} \
     --cache \
     --dir ${params.vepcache} \ 
-    --custom ${params.vepcache}/clinvar.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN \
+    --custom file=${params.vepcache}/clinvar.vcf.gz,short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN
     --everything 
     """
 }
