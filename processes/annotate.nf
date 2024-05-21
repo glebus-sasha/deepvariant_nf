@@ -9,6 +9,7 @@ process ANNOTATE {
 	
     input:
     path vcf
+    path gzi
 
     output:
     path '*.vep.vcf', emit: vep
@@ -22,9 +23,8 @@ process ANNOTATE {
     --stats_file ${vcf.baseName}.vep.html \
     --fork ${task.cpus} \
     --cache \
-    --dir ${params.vepcache} \
-    --vcf \ 
-    --everything \
-    --custom file=${params.vepcache}/clinvar.vcf.gz,short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN
+    --dir ${params.vepcache} \ 
+    --custom ${params.vepcache}/clinvar.vcf.gz,ClinVar,vcf,exact,0,CLNSIG,CLNREVSTAT,CLNDN \
+    --everything 
     """
 }
