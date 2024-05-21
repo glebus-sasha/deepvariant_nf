@@ -24,7 +24,7 @@ process ANNOTATE {
     --dir ${params.vepcache} \
     --vcf \ 
     --fork $task.cpus \
-    --everything
+    --everything \
     --custom file=${params.vepcache}/clinvar.vcf.gz,short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN
     """
 }
