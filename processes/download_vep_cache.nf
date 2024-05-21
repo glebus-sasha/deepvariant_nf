@@ -18,5 +18,7 @@ process DOWNLOAD_VEP_CACHE {
     -s homo_sapiens \
     -y GRCh38
     wget https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz -o $cache_dir/clinvar.vcf.gz
+    wget https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh38/clinvar.vcf.gz.tbi -o $cache_dir/clinvar.vcf.gz.tbi
+    
     """
 }

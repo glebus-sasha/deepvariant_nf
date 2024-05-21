@@ -56,6 +56,11 @@ input_fastqs = params.reads ? Channel.fromFilePairs(params.reads, checkIfExists:
 // Define the input channel for bwa index files, if provided
 bwaidx = params.bwaidx ? Channel.fromPath(params.bwaidx, checkIfExists: true).collect() : null
 
+// Define the input channel for Clinvar files, if provided
+clinvar_gz = params.bwaidx ? Channel.fromPath(params.vepcache/clinvar.vcf.gz, checkIfExists: true) : null
+
+// Define the input channel for Clinvar index files, if provided
+clinvar_gz_tbi = params.bwaidx ? Channel.fromPath(params.vepcache/clinvar.vcf.gz.tbi, checkIfExists: true) : null
 
 // Define the workflow
 workflow {
@@ -75,7 +80,7 @@ workflow {
     FAINDEX(params.reference)
     BAMINDEX(ALIGN.out.bam)
     VARCALL(params.reference, ALIGN.out.bam, BAMINDEX.out.bai, FAINDEX.out.fai)
-    ANNOTATE(VARCALL.out.vcf)
+    ANNOTATE(VARCALL.out.vcf, clinvar_gz, clinvar_gz_tbi)
     REPORT(TRIM.out.json.collect(), QCONTROL.out.zip.collect(), FLAGSTAT.out.flagstat.collect(), QUALIMAP.out.collect(), ANNOTATE.out.html.collect())
     // Make the pipeline reports directory if it needs
     if ( params.reports ) {
