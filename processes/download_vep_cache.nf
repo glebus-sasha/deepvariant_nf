@@ -1,6 +1,6 @@
 // Define the `DOWNLOAD_VEP_CACHE` process that download VEP cache
 process DOWNLOAD_VEP_CACHE {
-    container = 'mgibio/vep_helper-cwl:vep_105.0_v1'
+    container = 'ensemblorg/ensembl-vep:latest'
     tag "$cache_dir"
     publishDir "${params.outdir}/${workflow.start}[${workflow.runName}]/DOWNLOAD_VEP_CACHE"
     cpus params.cpus
