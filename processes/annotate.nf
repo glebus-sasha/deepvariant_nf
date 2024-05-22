@@ -9,7 +9,6 @@ process ANNOTATE {
 	
     input:
     path vcf
-    path gzi
 
     output:
     path '*.vep.vcf', emit: vep
