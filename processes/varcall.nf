@@ -4,6 +4,7 @@ process VARCALL {
     tag "$reference $bamFile"
     publishDir "${params.outdir}/${workflow.start}[${workflow.runName}]/VARCALL"
     cpus params.cpus
+    cache "lenient" 
 //    debug true
     errorStrategy 'ignore'
 	
@@ -14,9 +15,9 @@ process VARCALL {
     path fai
 
     output:
-    path "${bamFile.baseName}.vcf.gz", emit:vcf
-    path "${bamFile.baseName}.g.vcf.gz", emit: gvcf
-    path '*.html', emit: html
+    path "${bamFile.baseName}.vcf.gz",      emit:vcf
+    path "${bamFile.baseName}.g.vcf.gz",    emit: gvcf
+    path '*.html',                          emit: html
     
     script:
     """

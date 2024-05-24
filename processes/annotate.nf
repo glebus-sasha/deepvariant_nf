@@ -1,12 +1,14 @@
 // Define the `ANNOTATE` process that performs annotation
 process ANNOTATE {
     container = 'ensemblorg/ensembl-vep:latest'
+    containerOptions "-B ${params.vepcache}:/opt/vep/.vep"
     tag "$vcf"
     publishDir "${params.outdir}/${workflow.start}[${workflow.runName}]/ANNOTATE"
     cpus params.cpus
-	  debug true
+    debug true
+    cache "lenient"
 //    errorStrategy 'ignore'
-	
+
     input:
     path vcf
 
@@ -22,8 +24,11 @@ process ANNOTATE {
     --stats_file ${vcf.baseName}.vep.html \
     --fork ${task.cpus} \
     --cache \
-    --dir ${params.vepcache} \ 
-    --custom file=${params.vepcache}/clinvar.vcf.gz,short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN
-    --everything 
+    --everything \
+    --species homo_sapiens \
+    --custom file=/opt/vep/.vep/clinvar.vcf.gz,short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN \
+    --offline \
+    --assembly GRCh38 \
+    --dir ${params.vepcache}
     """
 }
