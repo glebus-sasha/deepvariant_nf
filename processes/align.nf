@@ -13,7 +13,7 @@ process ALIGN {
     path idx
     
     output:
-    path "${sid}.sorted.bam", emit: bam
+    tuple val(sid), path("*.sorted.bam"), emit: bam
     
     script:
     """

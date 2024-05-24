@@ -8,13 +8,13 @@ process FLAGSTAT {
 //    errorStrategy 'ignore'
 
     input:
-    path bamFile
+    tuple val(sid), path(bamFile)
     
     output:
     path "*.flagstat", emit: flagstat
     
     script:
     """
-    samtools flagstat $bamFile > ${bamFile.baseName}.flagstat
+    samtools flagstat $bamFile > ${sid}.flagstat
     """
 }

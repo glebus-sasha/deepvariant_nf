@@ -7,13 +7,13 @@ process BAMINDEX {
 //	  debug true
 //    errorStrategy 'ignore'
     input:
-    path bamFile
+    tuple val(sid), path(bamFile)
 
     output:
-    path '*.sorted.bam.bai', emit: bai
+    path '*.bai', emit: bai
 
     script:
     """
-	samtools index ${bamFile.baseName}.bam
+	samtools index ${bamFile}
     """
 }

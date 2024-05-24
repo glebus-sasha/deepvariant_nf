@@ -8,7 +8,7 @@ process QUALIMAP {
 //    errorStrategy 'ignore'
 
     input:
-    path bamFile
+    tuple val(sid), path(bamFile)
     
     output:
     path "*"

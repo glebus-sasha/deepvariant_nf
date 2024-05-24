@@ -10,14 +10,15 @@ process VARCALL {
 	
     input:
     path reference
-    path bamFile
+    tuple val(sid), path(bamFile)
     path bai
     path fai
 
     output:
-    path "${bamFile.baseName}.vcf.gz",      emit:vcf
-    path "${bamFile.baseName}.g.vcf.gz",    emit: gvcf
-    path '*.html',                          emit: html
+    val sid
+    tuple val(sid), path("${sid}.vcf.gz"),      emit:vcf
+    path "${sid}.g.vcf.gz",                     emit: gvcf
+    path '*.html',                              emit: html
     
     script:
     """
@@ -25,8 +26,8 @@ process VARCALL {
     --model_type=WES \
     --ref=$reference \
     --reads=$bamFile \
-    --output_vcf=${bamFile.baseName}.vcf.gz \
-    --output_gvcf=${bamFile.baseName}.g.vcf.gz \
+    --output_vcf=${sid}.vcf.gz \
+    --output_gvcf=${sid}.g.vcf.gz \
     --num_shards=${task.cpus} 
     """
 }

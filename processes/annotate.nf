@@ -10,7 +10,7 @@ process ANNOTATE {
 //    errorStrategy 'ignore'
 
     input:
-    path vcf
+    tuple val(sid), path(vcf)
 
     output:
     path '*.vep.vcf', emit: vep
@@ -20,8 +20,8 @@ process ANNOTATE {
     """
     vep \
     -i $vcf \
-    -o ${vcf.baseName}.vep.vcf \
-    --stats_file ${vcf.baseName}.vep.html \
+    -o ${sid}.vep.vcf \
+    --stats_file ${sid}.vep.html \
     --fork ${task.cpus} \
     --cache \
     --everything \
