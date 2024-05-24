@@ -10,7 +10,7 @@ process BAMINDEX {
     tuple val(sid), path(bamFile)
 
     output:
-    path '*.bai', emit: bai
+    tuple val(sid), path('*.bai'), path(bamFile), emit: bai
 
     script:
     """

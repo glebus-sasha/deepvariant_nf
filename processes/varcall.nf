@@ -10,8 +10,7 @@ process VARCALL {
 	
     input:
     path reference
-    tuple val(sid), path(bamFile)
-    path bai
+    tuple val(sid), path(bai), path(bamFile)
     path fai
 
     output:
