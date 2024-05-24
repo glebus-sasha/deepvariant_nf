@@ -2,7 +2,7 @@
 process BAMINDEX {
     container = 'glebusasha/bwa_samtools'
     tag "$bamFile"
-    publishDir "${params.outdir}/${workflow.start}[${workflow.runName}]/BAMINDEX"
+    publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/BAMINDEX"
     cpus params.cpus
 //	  debug true
 //    errorStrategy 'ignore'

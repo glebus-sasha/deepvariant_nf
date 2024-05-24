@@ -84,7 +84,7 @@ workflow {
     
     // Make the pipeline reports directory if it needs
     if ( params.reports ) {
-        def pipeline_report_dir = new File("${params.outdir}/${workflow.start}[${workflow.runName}]/pipeline_info")
+        def pipeline_report_dir = new File("${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/pipeline_info")
         pipeline_report_dir.mkdirs()
     }
 }

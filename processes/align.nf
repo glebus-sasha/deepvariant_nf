@@ -3,7 +3,7 @@ process ALIGN {
     container = 'glebusasha/bwa_samtools'
     tag "$reference ${sid}"
     cpus params.cpus
-    publishDir "${params.outdir}/${workflow.start}[${workflow.runName}]/ALIGN"
+    publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/ALIGN"
 //	  debug true
 //    errorStrategy 'ignore'
 

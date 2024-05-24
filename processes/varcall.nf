@@ -2,7 +2,7 @@
 process VARCALL {
     container = 'google/deepvariant:1.6.1'
     tag "$reference $bamFile"
-    publishDir "${params.outdir}/${workflow.start}[${workflow.runName}]/VARCALL"
+    publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/VARCALL"
     cpus params.cpus
     cache "lenient" 
 //    debug true

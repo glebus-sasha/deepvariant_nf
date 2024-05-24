@@ -3,7 +3,7 @@ process ANNOTATE {
     container = 'ensemblorg/ensembl-vep:latest'
     containerOptions "-B ${params.vepcache}:/opt/vep/.vep"
     tag "$vcf"
-    publishDir "${params.outdir}/${workflow.start}[${workflow.runName}]/ANNOTATE"
+    publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/ANNOTATE"
     cpus params.cpus
     debug true
     cache "lenient"

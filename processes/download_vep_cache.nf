@@ -2,7 +2,7 @@
 process DOWNLOAD_VEP_CACHE {
     container = 'ensemblorg/ensembl-vep:latest'
     tag "$cache_dir"
-    publishDir "${params.outdir}/${workflow.start}[${workflow.runName}]/DOWNLOAD_VEP_CACHE"
+    publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/DOWNLOAD_VEP_CACHE"
     cpus params.cpus
 //	  debug true
     errorStrategy 'ignore'

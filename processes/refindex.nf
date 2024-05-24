@@ -2,7 +2,7 @@
 process REFINDEX {
     container = 'glebusasha/bwa_samtools'
     tag "$reference"
-    publishDir "${params.outdir}/${workflow.start}[${workflow.runName}]/REFINDEX"
+    publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/REFINDEX"
     cpus params.cpus
 //	  debug true
 //    errorStrategy 'ignore'
