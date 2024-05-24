@@ -68,7 +68,7 @@ The pipeline is implemented in Nextflow and includes several stages for NGS data
 6. **PREPARE:** File processing and preparation using Samtools.
 7. **VARCALL:** Variant calling using deepvariant.
 8. **ANNOTATE:** Annotation using VEP (Variant Effect Predictor).
-9. **REPORT:** COmpiling report using MultiQC.
+9. **REPORT:** Compiling report using MultiQC.
 
 ## Usage
 
