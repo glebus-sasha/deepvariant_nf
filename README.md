@@ -23,7 +23,7 @@ flowchart TB
     v14([VARCALL])
     v17([ANNOTATE])
     v24([REPORT])
-    v2(( ))
+    v2((REFINDEX))
     v19(( ))
     v20(( ))
     v21(( ))
