@@ -68,10 +68,12 @@ The pipeline is implemented in Nextflow and includes several stages for NGS data
 4. **ALIGN:** Sequence alignment using BWA mem.
 5. **FLAGSTAT:** Alignment quality control using Samtools flagstat.
 6. **QUALIMAP:** Alignment quality control using Qualimap.
-7. **PREPARE:** File processing and preparation using Samtools.
-8. **VARCALL:** Variant calling using deepvariant.
-9. **ANNOTATE:** Annotation using VEP (Variant Effect Predictor).
-10. **REPORT:** Compiling report using MultiQC.
+7. **FAINDEX:** Fai index creation using Samtools faidx 
+8. **BAMINDEX:** Bai index creation using Samtools index 
+9. **PREPARE:** File processing and preparation using Samtools.
+10. **VARCALL:** Variant calling using deepvariant.
+11. **ANNOTATE:** Annotation using VEP (Variant Effect Predictor).
+12. **REPORT:** Compiling report using MultiQC.
 
 ## Usage
 
