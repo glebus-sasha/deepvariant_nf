@@ -18,7 +18,8 @@ flowchart TB
     v8([ALIGN])
     v9([FLAGSTAT])
     v10([QUALIMAP])
-    v12([PREPARE])
+    v12([FAINDEX])
+    v13([BAMINDEX])
     v14([VARCALL])
     v17([ANNOTATE])
     v24([REPORT])
@@ -38,12 +39,13 @@ flowchart TB
     v2 --> v8
     v8 --> v9
     v8 --> v10
-    v8 --> v12
+    v8 --> v13
     v8 --> v14
     v9 --> v21
     v10 --> v22
     v1 --> v12
     v12 --> v14
+    v13 --> v14
     v1 --> v14
     v14 --> v17
     v17 --> v18
