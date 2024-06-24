@@ -15,7 +15,7 @@ process VARCALL {
 
     output:
     val sid
-    tuple val(sid), path("${sid}.vcf.gz"),      emit:vcf
+    tuple val(sid), path("${sid}.vcf.gz"),      emit: vcf
     path "${sid}.g.vcf.gz",                     emit: gvcf
     path '*.html',                              emit: html
     
