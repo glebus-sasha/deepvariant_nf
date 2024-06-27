@@ -73,7 +73,7 @@ workflow {
         pipeline_report_dir.mkdirs()
     }
 }
-1
+
 // Log pipeline execution summary on completion
 workflow.onComplete {
     log.info """\
