@@ -1,7 +1,6 @@
 #!/usr/bin/env nextflow
 
 // Include processes
-include { QCONTROL }            from './processes/qcontrol.nf'
 include { TRIM }                from './processes/trim.nf'
 include { ALIGN }               from './processes/align.nf'
 include { FLAGSTAT }            from './processes/flagstat.nf'
@@ -74,6 +73,7 @@ workflow {
         def pipeline_report_dir = new File("${params.outdir}/pipeline_info/")
         pipeline_report_dir.mkdirs()
     }
+}
 
 // Log pipeline execution summary on completion
 workflow.onComplete {
