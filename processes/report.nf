@@ -8,8 +8,6 @@ process REPORT {
 //    errorStrategy 'ignore'
 	
     input:
-    path fastp
-    path fastqc
     path flagstat
     path qualimap
     path vep
@@ -19,6 +17,6 @@ process REPORT {
 
     script:
     """
-    multiqc $fastqc $fastp $flagstat $qualimap $vep
+    multiqc $flagstat $qualimap $vep
     """
 }

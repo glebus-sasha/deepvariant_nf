@@ -1,16 +1,13 @@
 #!/usr/bin/env nextflow
 
 // Include processes
-include { REFINDEX }            from './processes/refindex.nf'
 include { QCONTROL }            from './processes/qcontrol.nf'
 include { TRIM }                from './processes/trim.nf'
 include { ALIGN }               from './processes/align.nf'
 include { FLAGSTAT }            from './processes/flagstat.nf'
 include { QUALIMAP }            from './processes/qualimap.nf'
-include { FAINDEX }             from './processes/faindex.nf'
 include { BAMINDEX }            from './processes/bamindex.nf'
 include { VARCALL }             from './processes/varcall.nf'
-include { DOWNLOAD_VEP_CACHE }  from './processes/download_vep_cache.nf'
 include { ANNOTATE }            from './processes/annotate.nf'
 include { REPORT }              from './processes/report.nf'
 
@@ -41,7 +38,6 @@ if ( params.help ) {
             |
             |Optional arguments:
             |   -profile        <docker/singularity>
-            |   -prebuild       Use pre-built bwa indexes and pre-downloaded vep cache
             |   -reports        Generate pipeline reports
             |
 """.stripMargin()
@@ -51,43 +47,33 @@ if ( params.help ) {
 }
 
 // Define the input channel for FASTQ files, if provided
-input_fastqs = params.reads ? Channel.fromFilePairs(params.reads, checkIfExists: true) : null
+input_fastqs = params.reads ? Channel.fromFilePairs("${params.reads}/*[rR]{1,2}*.*{fastq,fq}*", checkIfExists: true) : null
 
 // Define the input channel for bwa index files, if provided
-bwaidx = params.bwaidx ? Channel.fromPath(params.bwaidx, checkIfExists: true).collect() : null
+bwaidx = params.bwaidx ? Channel.fromPath("${params.bwaidx}/*", checkIfExists: true).collect() : null
 
+// Define the input channel for fai index files, if provided
+faidx = params.bwaidx ? Channel.fromPath("${params.faidx}/*.fai", checkIfExists: true).collect() : null
 
 // Define the input channels for Clinvar files and indeces, if provided
 clinvar_gz = params.bwaidx ? Channel.fromPath("${params.vepcache}/clinvar.vcf.gz", checkIfExists: true) : null
 clinvar_gz_tbi = params.bwaidx ? Channel.fromPath("${params.vepcache}/clinvar.vcf.gz.tbi", checkIfExists: true) : null
 
 // Define the workflow
-workflow {
-    QCONTROL(input_fastqs)
-    TRIM(input_fastqs)
-    if( !params.prebuild ) {
-        new File("$params.vepcache").mkdirs() // Make the VEP cache  directory if it needs
-        REFINDEX(params.reference)
-        ALIGN(TRIM.out.trimmed_reads, params.reference, REFINDEX.out)
-        DOWNLOAD_VEP_CACHE(params.vepcache)
-    }
-    else {
-        ALIGN(TRIM.out.trimmed_reads, params.reference, bwaidx)
-    }
+workflow { 
+    ALIGN(input_fastqs, params.reference, bwaidx)
     FLAGSTAT(ALIGN.out.bam)
     QUALIMAP(ALIGN.out.bam)
-    FAINDEX(params.reference)
     BAMINDEX(ALIGN.out.bam)
-    VARCALL(params.reference, BAMINDEX.out.bai, FAINDEX.out.fai)
+    VARCALL(params.reference, BAMINDEX.out.bai, faidx)
     ANNOTATE(VARCALL.out.vcf)
-    REPORT(TRIM.out.json.collect(), QCONTROL.out.zip.collect(), FLAGSTAT.out.flagstat.collect(), QUALIMAP.out.collect(), ANNOTATE.out.html.collect())
+    REPORT(FLAGSTAT.out.flagstat.collect(), QUALIMAP.out.collect(), ANNOTATE.out.html.collect())
     
     // Make the pipeline reports directory if it needs
     if ( params.reports ) {
         def pipeline_report_dir = new File("${params.outdir}/pipeline_info/")
         pipeline_report_dir.mkdirs()
     }
-}
 
 // Log pipeline execution summary on completion
 workflow.onComplete {
