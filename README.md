@@ -6,57 +6,47 @@ This repository contains a Nextflow variant calling pipeline for analyzing Next-
 %%{init: {'theme':'base'}}%%
 flowchart TB
     subgraph "input"
-    v0["reads"]
+    v0["trimmed reads"]
     v1["reference"]
+    v30["indices"]
+    v31["vep_DB"]
     end
-    v3([QCONTROL])
     subgraph "output"
     v18["vcf"]
     v25["html"]
     end
-    v5([TRIM])
     v8([ALIGN])
     v9([FLAGSTAT])
     v10([QUALIMAP])
-    v12([FAINDEX])
     v13([BAMINDEX])
     v14([VARCALL])
     v17([ANNOTATE])
     v24([REPORT])
-    v2([REFINDEX])
-    v19(( ))
-    v20(( ))
     v21(( ))
     v22(( ))
     v23(( ))
-    v0 --> v3
-    v0 --> v5
-    v1 --> v2
-    v3 --> v20
-    v5 --> v8
-    v5 --> v19
+    v0 --> v8
     v1 --> v8
-    v2 --> v8
+    v30 --> v8
     v8 --> v9
     v8 --> v10
     v8 --> v13
     v8 --> v14
     v9 --> v21
     v10 --> v22
-    v1 --> v12
-    v12 --> v14
     v13 --> v14
     v1 --> v14
     v14 --> v17
     v17 --> v18
     v17 --> v23
-    v19 --> v24
-    v20 --> v24
+    v31 --> v14
+    v30 --> v14
     v21 --> v24
     v22 --> v24
     v23 --> v24
     v24 --> v25
 ```
+
 
 ## Description
 
