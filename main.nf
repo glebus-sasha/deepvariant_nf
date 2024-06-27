@@ -1,7 +1,6 @@
 #!/usr/bin/env nextflow
 
 // Include processes
-include { TRIM }                from './processes/trim.nf'
 include { ALIGN }               from './processes/align.nf'
 include { FLAGSTAT }            from './processes/flagstat.nf'
 include { QUALIMAP }            from './processes/qualimap.nf'
@@ -74,7 +73,7 @@ workflow {
         pipeline_report_dir.mkdirs()
     }
 }
-
+1
 // Log pipeline execution summary on completion
 workflow.onComplete {
     log.info """\
