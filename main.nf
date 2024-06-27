@@ -11,9 +11,9 @@ include { REPORT }              from './processes/report.nf'
 
 // Logging pipeline information
 log.info """\
-    ==========================================
-     D E E P V A R I A N T   P I P E L I N E
-    ==========================================
+\033[0;36m    ==========================================  \033[0m
+\033[0;36m     D E E P V A R I A N T   P I P E L I N E    \033[0m
+\033[0;36m    ==========================================  \033[0m
 
     reference:  ${params.reference}
     reads:      ${params.reads}
