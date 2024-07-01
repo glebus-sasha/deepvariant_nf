@@ -57,9 +57,15 @@ faidx = params.bwaidx ? Channel.fromPath("${params.faidx}/*.fai", checkIfExists:
 clinvar_gz = params.bwaidx ? Channel.fromPath("${params.vepcache}/clinvar.vcf.gz", checkIfExists: true) : null
 clinvar_gz_tbi = params.bwaidx ? Channel.fromPath("${params.vepcache}/clinvar.vcf.gz.tbi", checkIfExists: true) : null
 
+// Define the bed_file channel
+// If params.regions is provided, create a channel from the specified path and collect it into a list
+// Otherwise, create a channel from the path "assets/dummy.bed" and collect it into a list
+// https://github.com/nextflow-io/nextflow/issues/1694
+bed_file = params.regions ? Channel.fromPath("${params.regions}").collect() : Channel.fromPath("assets/dummy.bed").collect()
+
 // Define the workflow
 workflow { 
-    ALIGN(input_fastqs, params.reference, bwaidx)
+    ALIGN(input_fastqs, params.reference, bwaidx, bed_file)
     FLAGSTAT(ALIGN.out.bam)
     QUALIMAP(ALIGN.out.bam)
     BAMINDEX(ALIGN.out.bam)
