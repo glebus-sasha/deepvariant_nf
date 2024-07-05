@@ -13,14 +13,14 @@ process ANNOTATE {
     tuple val(sid), path(vcf)
 
     output:
-    path '*.vep.vcf', emit: vep
+    path '*.vep', emit: vep
     path '*.vep.html', emit: html
 
     script:
     """
     vep \
     -i $vcf \
-    -o ${sid}.vep.vcf \
+    -o ${sid}.vep \
     --stats_file ${sid}.vep.html \
     --fork ${task.cpus} \
     --cache \
