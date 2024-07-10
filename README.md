@@ -52,18 +52,15 @@ flowchart TB
 
 The pipeline is implemented in Nextflow and includes several stages for NGS data analysis:
 
-1. **REFINDEX:** Index creation using BWA (Burrows-Wheeler Aligner).
-2. **QCONTROL:** Quality control using FastQC.
-3. **TRIM:** Data preprocessing using Fastp.
-4. **ALIGN:** Sequence alignment using BWA mem.
-5. **FLAGSTAT:** Alignment quality control using Samtools flagstat.
-6. **QUALIMAP:** Alignment quality control using Qualimap.
-7. **FAINDEX:** Fai index creation using Samtools faidx.
-8. **BAMINDEX:** Bai index creation using Samtools index.
-9. **PREPARE:** File processing and preparation using Samtools.
-10. **VARCALL:** Variant calling using deepvariant.
-11. **ANNOTATE:** Annotation using VEP (Variant Effect Predictor).
-12. **REPORT:** Compiling report using MultiQC.
+1. **ALIGN:** Sequence alignment using BWA mem.
+2. **FLAGSTAT:** Alignment quality control using Samtools flagstat.
+3. **QUALIMAP:** Alignment quality control using Qualimap.
+4. **FAINDEX:** Fai index creation using Samtools faidx.
+5. **BAMINDEX:** Bai index creation using Samtools index.
+6. **PREPARE:** File processing and preparation using Samtools.
+7. **VARCALL:** Variant calling using deepvariant.
+8. **ANNOTATE:** Annotation using VEP (Variant Effect Predictor).
+9. **REPORT:** Compiling report using MultiQC.
 
 ## Usage
 
