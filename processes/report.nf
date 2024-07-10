@@ -9,6 +9,8 @@ process REPORT {
 	
     input:
     path flagstat
+    path qualimap
+    path vep
 
     output:
     path '*.html', emit: html

@@ -69,7 +69,7 @@ workflow {
     FLAGSTAT(ALIGN.out.bam)
     QUALIMAP(ALIGN.out.bam)
     BAMINDEX(ALIGN.out.bam)
-    VARCALL(params.reference, BAMINDEX.out.bai, faidx)
+    VARCALL(params.reference, BAMINDEX.out.bai, faidx, bed_file)
     ANNOTATE(VARCALL.out.vcf)
     REPORT(FLAGSTAT.out.flagstat.collect(), QUALIMAP.out.collect(), ANNOTATE.out.html.collect())
     

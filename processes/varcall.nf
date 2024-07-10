@@ -12,6 +12,7 @@ process VARCALL {
     path reference
     tuple val(sid), path(bai), path(bamFile)
     path fai
+    path bedfile
 
     output:
     val sid
@@ -20,13 +21,14 @@ process VARCALL {
     path '*.html',                              emit: html
     
     script:
+    def bed_option = bedfile.getBaseName() == 'dummy' ? "" : "--par_regions_bed ${bedfile}"    // If the base name of bedfile is 'dummy', set bed_option to an empty string
     """
     /opt/deepvariant/bin/run_deepvariant \
     --model_type=WES \
     --ref=$reference \
     --reads=$bamFile \
     --output_vcf=${sid}.vcf.gz \
-    --output_gvcf=${sid}.g.vcf.gz \
+    --output_gvcf=${sid}.g.vcf.gz ${bed_option}\
     --num_shards=${task.cpus} 
     """
 }
