@@ -4,7 +4,7 @@ process ANNOTATE {
     containerOptions "-B ${params.vepcache}:/opt/vep/.vep"
     tag "$vcf"
     publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/ANNOTATE"
-    cpus params.cpus
+    cpus 1
     debug true
     cache "lenient"
 //    errorStrategy 'ignore'

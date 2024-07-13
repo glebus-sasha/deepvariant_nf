@@ -3,7 +3,7 @@ process BAMINDEX {
     container = 'glebusasha/bwa_samtools'
     tag "$bamFile"
     publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/BAMINDEX"
-    cpus params.cpus
+    cpus 1
 //	  debug true
 //    errorStrategy 'ignore'
     input:

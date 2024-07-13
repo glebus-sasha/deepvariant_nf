@@ -2,7 +2,7 @@
 process QUALIMAP {
     container = 'pegi3s/qualimap:2.2.1_ubuntu19.01'
     tag "$bamFile"
-    cpus params.cpus
+    cpus 1
     publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/QUALIMAP"
 //	  debug true
 //    errorStrategy 'ignore'
