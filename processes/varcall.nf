@@ -1,6 +1,6 @@
 // Define the `VARCALL` process that performs variant calling
 process VARCALL {
-    container = 'google/deepvariant:1.6.1'
+    container = 'nf-core/deepvariant:1.5.0'
     tag "$reference $bamFile"
     publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/VARCALL"
     cpus 1
