@@ -76,6 +76,13 @@ workflow {
     VARCALL(params.reference, BAMINDEX.out.bai, faidx, bed_file)
     ANNOTATE(VARCALL.out.vcf)
     REPORT(FLAGSTAT.out.flagstat.collect(), QUALIMAP.out.collect(), ANNOTATE.out.html.collect())
+
+    // Make the pipeline reports directory if it needs
+    if ( params.reports ) {
+        def pipeline_report_dir = new File("${params.outdir}/pipeline_info/")
+        pipeline_report_dir.mkdirs()
+    }
+
 }
 
 // Log pipeline execution summary on completion
