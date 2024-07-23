@@ -44,9 +44,14 @@ if ( params.help ) {
     exit(0)
 }
 
+
+
 // Make the results directory if it needs
 def result_dir = new File("${params.outdir}")
 result_dir.mkdirs()
+
+// Define the input channel for reference file
+reference = params.reference ? Channel.fromPath("${params.reference}").collect()
 
 // Define the input channel for FASTQ files, if provided
 input_fastqs = params.reads ? Channel.fromFilePairs("${params.reads}/*[rR]{1,2}*.*{fastq,fq}*", checkIfExists: true) : null
@@ -69,11 +74,11 @@ bed_file = params.regions ? Channel.fromPath("${params.regions}").collect() : Ch
 
 // Define the workflow
 workflow { 
-    ALIGN(input_fastqs, params.reference, bwaidx, bed_file)
+    ALIGN(input_fastqs, reference, bwaidx, bed_file)
     FLAGSTAT(ALIGN.out.bam)
     QUALIMAP(ALIGN.out.bam)
     BAMINDEX(ALIGN.out.bam)
-    VARCALL(params.reference, BAMINDEX.out.bai, faidx, bed_file)
+    VARCALL(reference, BAMINDEX.out.bai, faidx, bed_file)
     ANNOTATE(VARCALL.out.vcf)
     REPORT(FLAGSTAT.out.flagstat.collect(), QUALIMAP.out.collect(), ANNOTATE.out.html.collect())
 
