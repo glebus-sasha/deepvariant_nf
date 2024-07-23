@@ -33,14 +33,3 @@ process VARCALL {
     --num_shards=${task.cpus} 
     """
 }
-
-
-sudo parallel --tmpdir /storage/aglebus/data/tmpdir -k -j 40 'docker run \
-    -v "/storage/aglebus/data/":"/data" \
-    google/deepvariant:1.6.1 \
-    /opt/deepvariant/bin/run_deepvariant \
-    --model_type WGS \
-    --ref="/data/reference/GCF_000001405.40_GRCh38.p14_genomic.fa" \
-    --reads="/data/BAM/{}.bam" \
-    --output_vcf="/data/Output/{}.vcf.gz" \
-    --output_gvcf="/data/Output/{}.g.vcf.gz"' :::: /storage/aglebus/data/Sample_ID.txt
