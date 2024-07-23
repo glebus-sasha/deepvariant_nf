@@ -44,6 +44,10 @@ if ( params.help ) {
     exit(0)
 }
 
+// Make the results directory if it needs
+def result_dir = new File("${params.outdir}")
+result_dir.mkdirs()
+
 // Define the input channel for FASTQ files, if provided
 input_fastqs = params.reads ? Channel.fromFilePairs("${params.reads}/*[rR]{1,2}*.*{fastq,fq}*", checkIfExists: true) : null
 
