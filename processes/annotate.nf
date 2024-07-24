@@ -22,7 +22,7 @@ process ANNOTATE {
     script:
     """
     vep \
-    --dir_cache ${vep_cache} \
+    --dir ${vep_cache} \
     -i $vcf \
     -o ${sid}.vep \
     --stats_file ${sid}.vep.html \
