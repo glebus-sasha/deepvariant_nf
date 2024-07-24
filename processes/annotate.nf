@@ -1,7 +1,7 @@
 // Define the `ANNOTATE` process that performs annotation
 process ANNOTATE {
     container = 'ensemblorg/ensembl-vep:latest'
-    containerOptions "-B ${params.vepcache}:/opt/vep/.vep"
+//    containerOptions "-B ${params.vepcache}:/opt/vep/.vep"
     tag "$vcf"
     publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/ANNOTATE"
 //    cpus 1
@@ -11,6 +11,7 @@ process ANNOTATE {
 
     input:
     tuple val(sid), path(vcf)
+    path vep_cache
 
     output:
     path '*.vep', emit: vep
@@ -19,16 +20,17 @@ process ANNOTATE {
     script:
     """
     vep \
+    --dir ${vep_cache} \
     -i $vcf \
     -o ${sid}.vep \
     --stats_file ${sid}.vep.html \
     --fork ${task.cpus} \
     --cache \
+    --custom file=${vep_cache}/clinvar.vcf.gz,short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN \
     --everything \
     --species homo_sapiens \
-    --custom file=/opt/vep/.vep/clinvar.vcf.gz,short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN \
     --offline \
-    --assembly GRCh38 \
-    --dir ${params.vepcache}
+    --assembly GRCh38
     """
 }
+

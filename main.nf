@@ -61,8 +61,9 @@ bwaidx = params.bwaidx ? Channel.fromPath("${params.bwaidx}/*", checkIfExists: t
 faidx = params.bwaidx ? Channel.fromPath("${params.faidx}/*.fai", checkIfExists: true).collect() : null
 
 // Define the input channels for Clinvar files and indeces, if provided
-clinvar_gz = params.bwaidx ? Channel.fromPath("${params.vepcache}/clinvar.vcf.gz", checkIfExists: true) : null
-clinvar_gz_tbi = params.bwaidx ? Channel.fromPath("${params.vepcache}/clinvar.vcf.gz.tbi", checkIfExists: true) : null
+//clinvar_gz = params.bwaidx ? Channel.fromPath("${params.vepcache}/clinvar.vcf.gz", checkIfExists: true) : null
+//clinvar_gz_tbi = params.bwaidx ? Channel.fromPath("${params.vepcache}/clinvar.vcf.gz.tbi", checkIfExists: true) : null
+vep_cache = params.vepcache ? Channel.fromPath("${params.vepcache}").collect(): null
 
 // Define the bed_file channel
 // If params.regions is provided, create a channel from the specified path and collect it into a list
@@ -77,7 +78,7 @@ workflow {
     QUALIMAP(ALIGN.out.bam)
     BAMINDEX(ALIGN.out.bam)
     VARCALL(reference, BAMINDEX.out.bai, faidx, bed_file)
-    ANNOTATE(VARCALL.out.vcf)
+    ANNOTATE(VARCALL.out.vcf, vep_cache)
     REPORT(FLAGSTAT.out.flagstat.collect(), QUALIMAP.out.collect(), ANNOTATE.out.html.collect())
 
     // Make the pipeline reports directory if it needs
