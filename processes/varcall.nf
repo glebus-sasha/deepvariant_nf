@@ -33,13 +33,3 @@ process VARCALL {
     --num_shards=${task.cpus} 
     """
 }
-
-parallel --tmpdir /home/aglebus/tmpdir -k -j 40 'docker run \
-    -v "/home/aglebus/":"/aglebus" \
-    google/deepvariant:1.6.1 \
-    /opt/deepvariant/bin/run_deepvariant \
-    --model_type WGS \
-    --ref="/aglebus/reference/hg38.fa" \
-    --reads="/aglebus/BAM/{}.bam" \
-    --output_vcf="/aglebus/Output/{}.vcf.gz" \
-    --output_gvcf="/aglebus/Output/{}.g.vcf.gz"' :::: /home/aglebus/Sample_ID.txt
