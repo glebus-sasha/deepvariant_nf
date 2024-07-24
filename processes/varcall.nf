@@ -30,6 +30,6 @@ process VARCALL {
     --reads=$bamFile \
     --output_vcf=${sid}.vcf.gz \
     --output_gvcf=${sid}.g.vcf.gz ${bed_option}\
-    --num_shards=${task.cpus} 
+    --num_shards=40
     """
 }
