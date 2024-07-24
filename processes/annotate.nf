@@ -22,12 +22,12 @@ process ANNOTATE {
     script:
     """
     vep \
-    --dir ${vep_cache} \
     -i $vcf \
     -o ${sid}.vep \
     --stats_file ${sid}.vep.html \
     --fork ${task.cpus} \
     --cache \
+    --dir ${vep_cache} \
     --custom file=${clinvar_gz},short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN \
     --everything \
     --species homo_sapiens \
