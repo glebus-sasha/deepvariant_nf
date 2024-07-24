@@ -104,16 +104,3 @@ workflow.onComplete {
         
     log.info ( workflow.success ? "\nDone" : "\nOops" )
 }
-
-
-parallel --tmpdir /home/aglebus/tmpdir -k -j 40 'docker run \
-    -v "/home/aglebus/":"/data" \
-    google/deepvariant:1.6.1 \
-    /opt/deepvariant/bin/run_deepvariant \
-    --model_type WGS \
-    --ref="/data/reference/hg38.fa" \
-    --regions="/data/hglft_genome_16b94_105e10.bed" \
-    --reads="/data/bams/{}.bam" \
-    --output_vcf="/data/Output/{}.vcf.gz" \
-    --output_gvcf="/data/Output/{}.g.vcf.gz"' :::: /home/aglebus/Sample_ID.txt
-
