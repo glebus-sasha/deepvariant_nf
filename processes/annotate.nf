@@ -12,9 +12,7 @@ process ANNOTATE {
     input:
     tuple val(sid), path(vcf)
     path vep_cache
-//    path clinvar_gz
-//    path clinvar_gzi
-
+    
     output:
     path '*.vep', emit: vep
     path '*.vep.html', emit: html
@@ -28,7 +26,6 @@ process ANNOTATE {
     --fork ${task.cpus} \
     --cache \
     --dir ${vep_cache} \
-#    --custom file=${clinvar_gz},short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN \
     --everything \
     --species homo_sapiens \
     --offline \
