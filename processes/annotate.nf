@@ -12,7 +12,8 @@ process ANNOTATE {
     input:
     tuple val(sid), path(vcf)
     path vep_cache
-    
+    path reference
+
     output:
     path '*.vep', emit: vep
     path '*.vep.html', emit: html
@@ -25,6 +26,7 @@ process ANNOTATE {
     --stats_file ${sid}.vep.html \
     --fork ${task.cpus} \
     --cache \
+    --fasta ${reference} \
     --dir ${vep_cache} \
     --everything \
     --species homo_sapiens \
