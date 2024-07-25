@@ -29,7 +29,8 @@ process VARCALL {
     --ref=$reference \
     --reads=$bamFile \
     --output_vcf=${sid}.vcf.gz \
-    --output_gvcf=${sid}.g.vcf.gz ${bed_option}\
+    --output_gvcf=${sid}.g.vcf.gz \
+    ${bed_option} \
     --num_shards=1
     """
 }
