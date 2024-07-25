@@ -22,7 +22,7 @@ process VARCALL {
     path '*.html',                              emit: html
     
     script:
-    def bed_option = bedfile.getBaseName() == 'dummy' ? "" : "--par_regions_bed ${bedfile}"    // If the base name of bedfile is 'dummy', set bed_option to an empty string
+    def bed_option = bedfile.getBaseName() == 'dummy' ? "" : "--regions ${bedfile}"    // If the base name of bedfile is 'dummy', set bed_option to an empty string
     """
     /opt/deepvariant/bin/run_deepvariant \
     --model_type=WES \
