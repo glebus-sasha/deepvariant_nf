@@ -78,7 +78,7 @@ workflow {
     QUALIMAP(ALIGN.out.bam)
     BAMINDEX(ALIGN.out.bam)
     VARCALL(reference, BAMINDEX.out.bai, faidx, bed_file)
-    ANNOTATE(VARCALL.out.vcf, vep_cache, clinvar_gz, clinvar_gz_tbi)
+    ANNOTATE(VARCALL.out.vcf)
     REPORT(FLAGSTAT.out.flagstat.collect(), QUALIMAP.out.collect(), ANNOTATE.out.html.collect())
 
     // Make the pipeline reports directory if it needs
