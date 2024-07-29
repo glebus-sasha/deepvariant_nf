@@ -5,7 +5,7 @@ process BAMINDEX {
     publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/BAMINDEX"
 //    cpus 1
 //	  debug true
-//    errorStrategy 'ignore'
+    errorStrategy 'ignore'
     input:
     tuple val(sid), path(bamFile)
 

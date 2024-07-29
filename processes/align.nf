@@ -5,7 +5,7 @@ process ALIGN {
 //    cpus 1
     publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/ALIGN"
 //	  debug true
-//    errorStrategy 'ignore'
+    errorStrategy 'ignore'
 
     input:
     tuple val(sid), path(reads)

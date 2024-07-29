@@ -6,7 +6,7 @@ process VARCALL {
 
 //    cache "lenient" 
     debug true
-//    errorStrategy 'ignore'
+    errorStrategy 'ignore'
 	
     input:
     path reference

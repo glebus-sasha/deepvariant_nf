@@ -7,7 +7,7 @@ process ANNOTATE {
 //    cpus 1
     debug true
     cache "lenient"
-//    errorStrategy 'ignore'
+.command.log    errorStrategy 'ignore'
 
     input:
     tuple val(sid), path(vcf)
