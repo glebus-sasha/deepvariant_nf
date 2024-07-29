@@ -49,10 +49,10 @@ def result_dir = new File("${params.outdir}")
 result_dir.mkdirs()
 
 // Make the pipeline reports directory if it needs
-    if ( params.reports ) {
-        def pipeline_report_dir = new File("${params.outdir}/pipeline_info/")
-        pipeline_report_dir.mkdirs()
-    }
+if ( params.reports ) {
+    def pipeline_report_dir = new File("${params.outdir}/pipeline_info/")
+    pipeline_report_dir.mkdirs()
+}
 
 // Define the input channel for reference file
 reference = params.reference ? Channel.fromPath("${params.reference}").collect(): null
