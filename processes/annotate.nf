@@ -5,7 +5,7 @@ process ANNOTATE {
     tag "$vcf"
     publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/ANNOTATE"
 //    cpus 1
-    debug true
+//    debug true
     cache "lenient"
     errorStrategy 'ignore'
 

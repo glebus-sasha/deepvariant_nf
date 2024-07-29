@@ -5,7 +5,7 @@ process VARCALL {
     publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/VARCALL"
 
 //    cache "lenient" 
-    debug true
+//    debug true
     errorStrategy 'ignore'
 	
     input:
