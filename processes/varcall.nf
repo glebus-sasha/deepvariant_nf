@@ -3,11 +3,10 @@ process VARCALL {
     container = 'google/deepvariant:1.6.1'
     tag "$reference $bamFile $bedfile"
     publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/VARCALL"
-//    cpus 1
-//    memory '2 GB'
+
 //    cache "lenient" 
-//    debug true
-    errorStrategy 'ignore'
+    debug true
+//    errorStrategy 'ignore'
 	
     input:
     path reference
