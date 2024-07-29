@@ -81,7 +81,7 @@ workflow {
     ANNOTATE(VARCALL.out.vcf, vep_cache, reference)
     REPORT(FLAGSTAT.out.flagstat.collect(), QUALIMAP.out.collect(), ANNOTATE.out.html.collect())
 
-    // Make the pipeline reports directory if it needs
+// Make the pipeline reports directory if it needs
     if ( params.reports ) {
         def pipeline_report_dir = new File("${params.outdir}/pipeline_info/")
         pipeline_report_dir.mkdirs()

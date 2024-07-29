@@ -26,7 +26,6 @@ process ANNOTATE {
     --stats_file ${sid}.vep.html \
     --fork ${task.cpus} \
     --cache \
-    --fasta ${reference} \
     --dir ${vep_cache} \
     --everything \
     --species homo_sapiens \
