@@ -17,7 +17,6 @@ process ANNOTATE {
 
     output:
     path "${sid}.vep", emit: vep
-    path "${sid}.vep.html", emit: html
 
     script:
     """
