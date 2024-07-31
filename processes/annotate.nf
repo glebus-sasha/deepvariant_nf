@@ -4,7 +4,6 @@ process ANNOTATE {
 //    containerOptions "-B ${params.vepcache}:/opt/vep/.vep"
     tag "$vcf"
     publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/ANNOTATE"
-//    cpus 1
 //    debug true
     cache "lenient"
     errorStrategy 'ignore'
@@ -17,8 +16,8 @@ process ANNOTATE {
     path clinvar_tbi
 
     output:
-    path '*.vep', emit: vep
-    path '*.vep.html', emit: html
+    path "${sid}.vep", emit: vep
+    path "${sid}.vep.html", emit: html
 
     script:
     """
