@@ -17,6 +17,7 @@ process ANNOTATE {
 
     output:
     path "${sid}.vep", emit: vep
+    path "${sid}.vep.html", emit: html
 
     script:
     """
@@ -31,6 +32,7 @@ process ANNOTATE {
     --custom file=${clinvar_gz},short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN \
     --offline \
     --assembly GRCh38
+    touch ${sid}.vep.html
     """
 }
 
