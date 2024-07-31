@@ -21,7 +21,7 @@ process ANNOTATE {
 
     script:
     """
-    chmod -R a+rwx ${vep_cache} #https://asia.ensembl.org/info/docs/tools/vep/script/vep_download.html
+    chmod -R a+rwx . #https://asia.ensembl.org/info/docs/tools/vep/script/vep_download.html
     vep \
     -i $vcf \
     -o ${sid}.vep \
