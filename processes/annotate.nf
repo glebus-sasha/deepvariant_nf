@@ -16,15 +16,15 @@ process ANNOTATE {
     path clinvar_tbi
 
     output:
-    path "$HOME/${sid}.vep", emit: vep
-    path "$HOME/${sid}.vep.html", emit: html
+    path "${sid}.vep", emit: vep
+    path "${sid}.vep.html", emit: html
 
     script:
     """
     vep \
     -i $vcf \
-    -o $HOME/${sid}.vep \
-    --stats_file $HOME/${sid}.vep.html \
+    -o ${sid}.vep \
+    --stats_file ${sid}.vep.html \
     --fork ${task.cpus} \
     --cache \
     --dir_cache ${vep_cache} \
