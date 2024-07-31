@@ -60,17 +60,6 @@ reference = params.reference ? Channel.fromPath("${params.reference}").collect()
 // Define the input channel for FASTQ files, if provided
 input_fastqs = params.reads ? Channel.fromFilePairs("${params.reads}/*[rR]{1,2}*.*{fastq,fq}*", checkIfExists: true) : null
 
-// Define number of files channel
-num_files = input_fastqs
-    .count()   // Подсчитываем количество пар файлов
-    .map { count -> 
-        println "Number of file pairs: ${count}"
-        count
-    }
-
-// Вычислите количество CPU на процесс
-def cpusPerProcess = Math.max(1, (params.cpus / Math.max(num_files, 1)).toInteger())
-
 // Define the input channel for bwa index files, if provided
 bwaidx = params.bwaidx ? Channel.fromPath("${params.bwaidx}/*.{amb,ann,bwt,pac,sa}", checkIfExists: true).collect() : null
 
@@ -90,7 +79,7 @@ bed_file = params.regions ? Channel.fromPath("${params.regions}").collect() : Ch
 
 // Define the workflow
 workflow { 
-    ALIGN(input_fastqs, reference, bwaidx, bed_file, cpusPerProcess)
+    ALIGN(input_fastqs, reference, bwaidx, bed_file)
     FLAGSTAT(ALIGN.out.bam)
     QUALIMAP(ALIGN.out.bam)
     BAMINDEX(ALIGN.out.bam)
