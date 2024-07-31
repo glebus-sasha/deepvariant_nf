@@ -21,11 +21,10 @@ process ANNOTATE {
 
     script:
     """
-    chmod -R a+rwx . #https://asia.ensembl.org/info/docs/tools/vep/script/vep_download.html
     vep \
     -i $vcf \
     -o ${sid}.vep \
-    --stats_file ${sid}.vep.html \
+ #   --stats_file ${sid}.vep.html \
     --fork ${task.cpus} \
     --cache \
     --dir_cache ${vep_cache} \
