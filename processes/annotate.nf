@@ -21,17 +21,7 @@ process ANNOTATE {
 
     script:
     """
-    vep \
-    -i $vcf \
-    -o ${sid}.vep \
-    --fork ${task.cpus} \
-    --cache \
-    --dir_cache ${vep_cache} \
-    --everything \
-    --species homo_sapiens \
-    --custom file=${clinvar_gz},short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN \
-    --offline \
-    --assembly GRCh38
+    touch ${sid}.vep
     touch ${sid}.vep.html
     """
 }
