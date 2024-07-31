@@ -61,8 +61,8 @@ reference = params.reference ? Channel.fromPath("${params.reference}").collect()
 input_fastqs = params.reads ? Channel.fromFilePairs("${params.reads}/*[rR]{1,2}*.*{fastq,fq}*", checkIfExists: true) : null
 
 // Define the number of input files
-num_files = input_fastqs.count().getVal()
-println "Number of files: ${num_files}"
+//num_files = input_fastqs.count().getVal()
+//println "Number of files: ${num_files}"
 
 // Define the input channel for bwa index files, if provided
 bwaidx = params.bwaidx ? Channel.fromPath("${params.bwaidx}/*.{amb,ann,bwt,pac,sa}", checkIfExists: true).collect() : null
