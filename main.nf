@@ -61,7 +61,7 @@ reference = params.reference ? Channel.fromPath("${params.reference}").collect()
 input_fastqs = params.reads ? Channel.fromFilePairs("${params.reads}/*[rR]{1,2}*.*{fastq,fq}*", checkIfExists: true) : null
 
 // Define the input channel for bwa index files, if provided
-bwaidx = params.bwaidx ? Channel.fromPath("${params.bwaidx}/*", checkIfExists: true).collect() : null
+bwaidx = params.bwaidx ? Channel.fromPath("${params.bwaidx}/*.{amb,ann,bwt,pac,sa}", checkIfExists: true).collect() : null
 
 // Define the input channel for fai index files, if provided
 faidx = params.bwaidx ? Channel.fromPath("${params.faidx}/*.fai", checkIfExists: true).collect() : null
