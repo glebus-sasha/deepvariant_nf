@@ -67,8 +67,8 @@ bwaidx = params.bwaidx ? Channel.fromPath("${params.bwaidx}/*.{amb,ann,bwt,pac,s
 faidx = params.bwaidx ? Channel.fromPath("${params.faidx}/*.fai", checkIfExists: true).collect() : null
 
 // Define the input channels for Clinvar files and indeces, if provided
-clinvar_gz = ${params.vepcache} ? Channel.fromPath("${params.vepcache}/clinvar.vcf.gz", checkIfExists: true) : null
-clinvar_gz_tbi = ${params.vepcache} ? Channel.fromPath("${params.vepcache}/clinvar.vcf.gz.tbi", checkIfExists: true) : null
+clinvar_gz = params.vepcache ? Channel.fromPath("${params.vepcache}/clinvar.vcf.gz", checkIfExists: true) : null
+clinvar_gz_tbi = params.vepcache ? Channel.fromPath("${params.vepcache}/clinvar.vcf.gz.tbi", checkIfExists: true) : null
 vep_cache = params.vepcache ? Channel.fromPath("${params.vepcache}").collect(): null
 
 // Define the bed_file channel
