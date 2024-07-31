@@ -27,6 +27,7 @@ process ANNOTATE {
     --stats_file ${sid}.vep.html \
     --fork ${task.cpus} \
     --cache \
+    --dir_cache ${vep_cache} \
     --everything \
     --species homo_sapiens \
     --custom file=${clinvar_gz},short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN \
