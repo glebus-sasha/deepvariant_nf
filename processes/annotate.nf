@@ -16,13 +16,23 @@ process ANNOTATE {
     path clinvar_tbi
 
     output:
-    path "${sid}.vep", emit: vep
-    path "${sid}.vep.html", emit: html
+    path "/opt/vep/.vep/${sid}.vep", emit: vep
+    path "/opt/vep/.vep/${sid}.vep.html", emit: html
 
     script:
     """
-    touch ${sid}.vep
-    touch ${sid}.vep.html
+    vep \
+    -i $vcf \
+    -o /opt/vep/.vep/${sid}.vep \
+    --stats_file /opt/vep/.vep/${sid}.vep.html \
+    --fork ${task.cpus} \
+    --cache \
+    --dir_cache ${vep_cache} \
+    --everything \
+    --species homo_sapiens \
+    --custom file=${clinvar_gz},short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN \
+    --offline \
+    --assembly GRCh38
     """
 }
 
