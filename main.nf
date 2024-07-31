@@ -68,6 +68,9 @@ num_files = input_fastqs
         count
     }
 
+// Вычислите количество CPU на процесс
+def cpusPerProcess = Math.max(1, (params.cpus / Math.max(num_files, 1)).toInteger())
+
 // Define the input channel for bwa index files, if provided
 bwaidx = params.bwaidx ? Channel.fromPath("${params.bwaidx}/*.{amb,ann,bwt,pac,sa}", checkIfExists: true).collect() : null
 
@@ -87,7 +90,7 @@ bed_file = params.regions ? Channel.fromPath("${params.regions}").collect() : Ch
 
 // Define the workflow
 workflow { 
-    ALIGN(input_fastqs, reference, bwaidx, bed_file, num_files)
+    ALIGN(input_fastqs, reference, bwaidx, bed_file, cpusPerProcess)
     FLAGSTAT(ALIGN.out.bam)
     QUALIMAP(ALIGN.out.bam)
     BAMINDEX(ALIGN.out.bam)

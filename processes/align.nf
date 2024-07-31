@@ -2,10 +2,7 @@
 process ALIGN {
     container = 'glebusasha/bwa_samtools'
     tag "$reference ${sid} $bedfile"
-    cpus { 
-        def cpusPerProcess = (params.cpus / (${num_files} / 2)).toInteger()
-        return cpusPerProcess > 0 ? cpusPerProcess : 1
-    }
+    cpus cpusPerProcess
     publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/ALIGN"
 //	  debug true
     errorStrategy 'ignore'
