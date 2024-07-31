@@ -6,7 +6,7 @@ process ALIGN {
         def cpusPerProcess = (params.cpus / Math.max(num_files, 1)).toInteger()
         // Убедимся, что каждый процесс получает хотя бы 1 CPU
         return cpusPerProcess > 0 ? cpusPerProcess : 1
-
+    }
     publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/ALIGN"
 //	  debug true
     errorStrategy 'ignore'
