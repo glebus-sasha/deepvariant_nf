@@ -85,7 +85,7 @@ workflow {
         input_fastqs.subscribe { pair ->
             num_files += pair.size()
         }
-
+println "Number of file pairs: ${num_files}"
     ALIGN(input_fastqs, reference, bwaidx, bed_file)
     FLAGSTAT(ALIGN.out.bam)
     QUALIMAP(ALIGN.out.bam)
