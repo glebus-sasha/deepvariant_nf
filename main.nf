@@ -60,11 +60,13 @@ reference = params.reference ? Channel.fromPath("${params.reference}").collect()
 // Define the input channel for FASTQ files, if provided
 input_fastqs = params.reads ? Channel.fromFilePairs("${params.reads}/*[rR]{1,2}*.*{fastq,fq}*", checkIfExists: true) : null
 
-// Подсчет количества файлов и передача значения в канал
-input_fastqs.count { count ->
-    num_files_channel = Channel.value(count)
-    println "Number of file pairs: ${count}"
-}
+// Создание канала для передачи количества файлов
+num_files_channel = input_fastqs
+    .count()   // Подсчитываем количество пар файлов
+    .map { count -> 
+        println "Number of file pairs: ${count}"
+        count
+    }
 
 // Define the input channel for bwa index files, if provided
 bwaidx = params.bwaidx ? Channel.fromPath("${params.bwaidx}/*.{amb,ann,bwt,pac,sa}", checkIfExists: true).collect() : null
