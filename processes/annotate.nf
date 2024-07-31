@@ -24,7 +24,6 @@ process ANNOTATE {
     vep \
     -i $vcf \
     -o ${sid}.vep \
- #   --stats_file ${sid}.vep.html \
     --fork ${task.cpus} \
     --cache \
     --dir_cache ${vep_cache} \
