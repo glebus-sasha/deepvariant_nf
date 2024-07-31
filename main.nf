@@ -60,8 +60,8 @@ reference = params.reference ? Channel.fromPath("${params.reference}").collect()
 // Define the input channel for FASTQ files, if provided
 input_fastqs = params.reads ? Channel.fromFilePairs("${params.reads}/*[rR]{1,2}*.*{fastq,fq}*", checkIfExists: true) : null
 
-// Создание канала для передачи количества файлов
-num_files_channel = input_fastqs
+// Define number of files channel
+num_files = input_fastqs
     .count()   // Подсчитываем количество пар файлов
     .map { count -> 
         println "Number of file pairs: ${count}"
@@ -87,7 +87,7 @@ bed_file = params.regions ? Channel.fromPath("${params.regions}").collect() : Ch
 
 // Define the workflow
 workflow { 
-    ALIGN(input_fastqs, reference, bwaidx, bed_file)
+    ALIGN(input_fastqs, reference, bwaidx, bed_file, num_files)
     FLAGSTAT(ALIGN.out.bam)
     QUALIMAP(ALIGN.out.bam)
     BAMINDEX(ALIGN.out.bam)

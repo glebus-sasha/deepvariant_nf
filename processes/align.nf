@@ -2,7 +2,11 @@
 process ALIGN {
     container = 'glebusasha/bwa_samtools'
     tag "$reference ${sid} $bedfile"
-//    cpus 1
+    cpus { 
+        def cpusPerProcess = (params.cpus / Math.max(num_files, 1)).toInteger()
+        // Убедимся, что каждый процесс получает хотя бы 1 CPU
+        return cpusPerProcess > 0 ? cpusPerProcess : 1
+
     publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/ALIGN"
 //	  debug true
     errorStrategy 'ignore'
@@ -12,7 +16,8 @@ process ALIGN {
     path reference
     path idx
     path bedfile
-    
+    path num_files
+
     output:
     tuple val(sid), path("*.sorted.bam"), emit: bam
     
