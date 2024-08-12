@@ -72,6 +72,7 @@ workflow.onComplete {
         Pipeline execution summary
         ---------------------------
         Results: ${params.outdir}
+            """
         .stripIndent()
         
     log.info ( workflow.success ? "\nDone" : "\nOops" )
