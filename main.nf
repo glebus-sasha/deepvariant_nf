@@ -21,29 +21,6 @@ log.info """\
     """
     .stripIndent(true)
 
-// Define help
-if ( params.help ) {
-    help = """main.nf: This repository contains a Nextflow pipeline for analyzing 
-            |Next-Generation Sequencing (NGS) data using octopus 
-            |
-            |Required arguments:
-            |   --reference     Location of the reference file.
-            |                   [default: ${params.reference}]
-            |   --reads         Location of the input file file.
-            |                   [default: ${params.reads}]
-            |   --outdir        Location of the output file file.
-            |                   [default: ${params.outdir}]
-            |
-            |Optional arguments:
-            |   -profile        <docker/singularity>
-            |   -reports        Generate pipeline reports
-            |
-""".stripMargin()
-    // Print the help with the stripped margin and exit
-    println(help)
-    exit(0)
-}
-
 // Make the results directory if it needs
 def result_dir = new File("${params.outdir}")
 result_dir.mkdirs()
@@ -94,12 +71,7 @@ workflow.onComplete {
     log.info """\
         Pipeline execution summary
         ---------------------------
-        Completed at: ${workflow.complete}
-        Duration    : ${workflow.duration}
-        Success     : ${workflow.success}
-        workDir     : ${workflow.workDir}
-        exit status : ${workflow.exitStatus}
-        """
+        Results: ${params.outdir}
         .stripIndent()
         
     log.info ( workflow.success ? "\nDone" : "\nOops" )
