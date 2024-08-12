@@ -5,7 +5,7 @@ process ANNOTATE {
     tag "$vcf"
     publishDir "${params.outdir}/${workflow.start.format('yyyy-MM-dd_HH-mm-ss')}_${workflow.runName}/ANNOTATE"
 //    debug true
-    cache "lenient"
+//    cache "lenient"
     errorStrategy 'ignore'
 
     input:
@@ -21,8 +21,18 @@ process ANNOTATE {
 
     script:
     """
-    touch ${sid}.vep
-    touch ${sid}.vep.html
+    vep \
+    -i $vcf \
+    -o ${sid}.vep \
+    --stats_file ${sid}.vep.html \
+    --fork ${task.cpus} \
+    --cache \
+    --dir_cache ${vep_cache} \
+    --everything \
+    --species homo_sapiens \
+    --custom file=${clinvar_gz},short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN \
+    --offline \
+    --assembly GRCh38
     """
 }
 
