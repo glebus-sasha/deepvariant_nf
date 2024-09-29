@@ -32,6 +32,7 @@ process ANNOTATE {
     --species homo_sapiens \
     --custom file=${clinvar_gz},short_name=ClinVar,format=vcf,type=exact,coords=0,fields=CLNSIG%CLNREVSTAT%CLNDN \
     --offline \
+    --vcf \
     --assembly GRCh38
     """
 }
